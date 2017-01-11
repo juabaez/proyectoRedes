@@ -1,0 +1,6 @@
+{
+	"A-D" : {"seats":25, "price":210},
+	"A-C" : {"seats":22, "price":40},
+	"B-D" : {"seats":21, "price":310},
+	"B-C" : {"seats":17, "price":194}
+}
