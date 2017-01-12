@@ -1,8 +1,10 @@
 var express = require('express');
-var argv = require('yargs')
+/*var argv = require('yargs')
 			.usage('Usar: $0 -p [num puerto] -t [archivo_tramos.json]')
 			.demand(['p','t'])
 			.argv;
+*/
+var argv;
 var app = express();
 var path = require('path');
 
@@ -16,7 +18,8 @@ var io = require('socket.io')(http);
 // 					"B-C" : {"seats":21, "price":210},
 // 					"C-D" : {"seats":17, "price":194}
 // 				};
-var stretches = require(path.resolve('./', argv.t));
+//var stretches = require(path.resolve('./', argv.t));
+var stretches = require(path.resolve('./viajes', "tramos.json"));
 
 //Reservas 
 var reserves = [];
@@ -73,7 +76,15 @@ app.post('/cancel/:nRes', function (req, res) {
 	res.send(cancel(nRes));
 }); 
 
+var server = app.listen(8081, function () {
 
-http.listen(argv.p, function () {
-  	console.log('Empresa escuchando en puerto ' + argv.p);
+  var host = server.address().address;
+  var port = server.address().port;
+
+  console.log("Example app listening at http://%s:%s", host, port);
+
 });
+/*http.listen(argv.p, function () {
+  	console.log('Empresa escuchando en puerto ' + argv.p);
+});*/
+
