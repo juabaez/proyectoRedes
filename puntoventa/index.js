@@ -1,3 +1,5 @@
+/* global require, c, s */
+
 var express = require('express');
 var argv = require('yargs')
 			.usage('Usar: $0 -p [num]')
