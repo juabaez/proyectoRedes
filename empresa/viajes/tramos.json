@@ -1,0 +1,57 @@
+[{
+  "originCity": "Río Cuarto",
+  "destinyCity": "Buenos Aires",
+  "price": 800,
+  "places": 160,
+  "reservedPlaces": 0,
+  "id": 1
+},{
+  "originCity": "Buenos Aires",
+  "destinyCity": "Río Cuarto",
+  "price": 800,
+  "places": 160,
+  "reservedPlaces": 0,
+  "id": 2
+},{
+  "originCity": "Buenos Aires",
+  "destinyCity": "Montevideo",
+  "price": 1000,
+  "places": 160,
+  "reservedPlaces": 0,
+  "id": 3
+},{
+  "originCity": "Montevideo",
+  "destinyCity": "Buenos Aires",
+  "price": 1000,
+  "places": 160,
+  "reservedPlaces": 0,
+  "id": 4
+},{
+  "originCity": "Río Cuarto",
+  "destinyCity": "Mendoza",
+  "price": 700,
+  "places": 160,
+  "reservedPlaces": 0,
+  "id": 5
+},{
+  "originCity": "Mendoza",
+  "destinyCity": "Río Cuarto",
+  "price": 700,
+  "places": 160,
+  "reservedPlaces": 0,
+  "id": 6
+}, {
+  "originCity": "Buenos Aires",
+  "destinyCity": "Rosario",
+  "price": 500,
+  "places": 160,
+  "reservedPlaces": 0,
+  "id": 7
+},  {
+  "originCity": "Rosario",
+  "destinyCity": "Río Cuarto",
+  "price": 500,
+  "places": 160,
+  "reservedPlaces": 0,
+  "id": 8
+}]
