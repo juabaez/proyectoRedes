@@ -11,6 +11,7 @@ var path = require('path');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var fs = require("fs");
 //Tramos {Nombre : {Asientos disponibles, precio}}
 // var stretches = {
 // 					"A-C" : {"seats":25, "price":250},
@@ -41,7 +42,7 @@ var cancel = function(nRes){
 }
 
 app.get('/list', function (req, res) {
-   fs.readFile( __dirname + "/data/" + "travels.json", 'utf8', function (err, data) {
+   fs.readFile( __dirname + "/viajes/" + "tramos.json", 'utf8', function (err, data) {
        console.log( data );
        res.end( data );
    });
