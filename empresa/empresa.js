@@ -1,3 +1,5 @@
+/* global __dirname */
+
 var express = require('express');
 /*var argv = require('yargs')
 			.usage('Usar: $0 -p [num puerto] -t [archivo_tramos.json]')
@@ -12,6 +14,10 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var fs = require("fs");
+
+//Empresas OffLine
+var empresaOff = [];
+
 //Tramos {Nombre : {Asientos disponibles, precio}}
 // var stretches = {
 // 					"A-C" : {"seats":25, "price":250},
@@ -20,7 +26,7 @@ var fs = require("fs");
 // 					"C-D" : {"seats":17, "price":194}
 // 				};
 //var stretches = require(path.resolve('./', argv.t));
-var stretches = require(path.resolve('./viajes', "tramos.json"));
+/*var stretches = require(path.resolve('./viajes', "tramos.json"));
 
 //Reservas 
 var reserves = [];
@@ -40,13 +46,6 @@ var cancel = function(nRes){
 		return 'Error';
 	}
 }
-
-app.get('/list', function (req, res) {
-   fs.readFile( __dirname + "/viajes/" + "tramos.json", 'utf8', function (err, data) {
-       console.log( data );
-       res.end( data );
-   });
-})
 
 app.get('/stretches', function (req, res) {
 	res.send(stretches);
@@ -84,7 +83,23 @@ app.post('/cancel/:nRes', function (req, res) {
 	res.send(cancel(nRes));
 }); 
 
-var server = app.listen(8081, function () {
+http.listen(argv.p, function () {
+  	console.log('Empresa escuchando en puerto ' + argv.p);
+});*/
+
+app.get('/list', function (req, res) {
+    // verifica que empresas estan offline
+    // luego para realizar las reservas y cancelarlas le preguntamos al vector empresaOff
+    // y si es tiene algun elemento sabemos que debemos guardar en un archivo o log las acciones que se realizen
+    empresasOnline();
+    fs.readFile( __dirname + "/datos/" + "tramos.json", 'utf8', function (err, data) {
+       //console.log( data );
+       var stringOffLine = "Empresas OffLine:\n"+"Name: "+empresaOff[0]+"\n"+"Name: "+empresaOff[1]+"\n\n";
+       res.end(stringOffLine + data );
+    });
+});
+
+var server = app.listen(8080, function () {
 
   var host = server.address().address;
   var port = server.address().port;
@@ -92,7 +107,38 @@ var server = app.listen(8081, function () {
   console.log("Example app listening at http://%s:%s", host, port);
 
 });
-/*http.listen(argv.p, function () {
-  	console.log('Empresa escuchando en puerto ' + argv.p);
-});*/
+
+function empresasOnline(){
+    var empresas = require(path.resolve('./datos', "empresas.json"));
+    console.log(empresas);
+    var stringify = JSON.stringify(empresas);
+    var parserEm = JSON.parse(stringify);
+    console.log(parserEm);
+    var j = 0;
+    console.log("cant Empresas " + parserEm.length);
+    for (var i = 0; i < parserEm.length; i++) {
+        console.log("Id: " + parserEm[i].id + " Name: "+parserEm[i].nameEnterprice);
+        if (!tieneTramos(parserEm[i].id)) {
+            empresaOff[j] = parserEm[i].nameEnterprice;
+            j++;
+        }
+    }
+}
+
+function tieneTramos(id){
+    var tramo = require(path.resolve('./datos', "tramos.json"));
+    var stringify = JSON.stringify(tramo);
+    var parserTramo = JSON.parse(stringify);
+    var i = 0;
+    var Encontrado = false;
+    while (i<parserTramo.length && !Encontrado){
+        if (parserTramo[i].idEnterprice == id) {
+            Encontrado = true;
+        }
+        i++;
+    }
+    console.log(Encontrado);
+    return Encontrado;
+}
+
 

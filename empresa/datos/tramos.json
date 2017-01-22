@@ -4,6 +4,7 @@
   "price": 800,
   "places": 160,
   "reservedPlaces": 0,
+  "idEnterprice": 2,
   "id": 1
 },{
   "originCity": "Buenos Aires",
@@ -11,6 +12,7 @@
   "price": 800,
   "places": 160,
   "reservedPlaces": 0,
+  "idEnterprice": 1,
   "id": 2
 },{
   "originCity": "Buenos Aires",
@@ -18,6 +20,7 @@
   "price": 1000,
   "places": 160,
   "reservedPlaces": 0,
+  "idEnterprice": 3,
   "id": 3
 },{
   "originCity": "Montevideo",
@@ -25,6 +28,7 @@
   "price": 1000,
   "places": 160,
   "reservedPlaces": 0,
+  "idEnterprice": 3,
   "id": 4
 },{
   "originCity": "Río Cuarto",
@@ -32,6 +36,7 @@
   "price": 700,
   "places": 160,
   "reservedPlaces": 0,
+  "idEnterprice": 1,
   "id": 5
 },{
   "originCity": "Mendoza",
@@ -39,6 +44,7 @@
   "price": 700,
   "places": 160,
   "reservedPlaces": 0,
+  "idEnterprice": 1,
   "id": 6
 }, {
   "originCity": "Buenos Aires",
@@ -46,6 +52,7 @@
   "price": 500,
   "places": 160,
   "reservedPlaces": 0,
+  "idEnterprice": 2,
   "id": 7
 },  {
   "originCity": "Rosario",
@@ -53,5 +60,6 @@
   "price": 500,
   "places": 160,
   "reservedPlaces": 0,
+  "idEnterprice": 3,
   "id": 8
 }]
