@@ -27,31 +27,32 @@ var disponible = function(cant, reservados){
 
 var server1 = 3;
 app.get('/list', function (req, res) {
-    fs.readFile( __dirname + "/datos/" + "tramos2.json", 'utf8', function (err, data) {
+    fs.readFile( __dirname + "/datos/" + "tramos.json", 'utf8', function (err, data) {
        res.end(data);
     });
 });
 
 app.post('/reservation', function (req, res) {
    // Get the travel, and make the reservation if it can be done.
-   console.log(req.params);
-   console.log(req.body);
-   var travelId = req.body.travelId;
-   var tramos;
-    fs.readFile( __dirname + "/data/" + "tramos2.json", 'utf8', function (err, data) {
+    console.log(req.params);
+    console.log(req.body);
+    cancelarReserva();
+    var travelId = req.body.travelId;
+    var tramos;
+    fs.readFile( __dirname + "/data/" + "tramos.json", 'utf8', function (err, data) {
         tramos = JSON.parse( data );
     }); 
     if (disponible(tramos[travelId-1].places,tramos[travelId-1].reserved)) {
         reserves.push({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),idTramo:travelId-1});
         ires++;
-        res.end("ReservaOK");
+        res.end("OK");
     } else {
-        res.end("ReservaFAIL");
+        res.end("FALLO");
     }
 });
 
 function cancelarReserva(){
-    for (var i = reserves.length-1; i < 0 ; i--) {
+    for (var i = reserves.length -1; i >=0 ; i--) {
         //console.log("Parse cada reserva: "+reserves[i]);
         var diff = server1;
         var dateReserva = new Date(reserves[i].date).getTime();
@@ -62,20 +63,25 @@ function cancelarReserva(){
         console.log("Diff entre hoy y la reserva: "+diffDate);
         if (diffDate>diff) {
             reserves.pop();
+            //reserves.remove(i);
+        }
+        if(reserves.length===0){
+            ires=1;
         }
     }
 }
-var server = app.listen(8081, function () {
+var server = app.listen(8080, function () {
 
   var host = server.address().address;
   var port = server.address().port;
+  console.log("Reservas al comenzar");
   console.log(reserves);
-  cancelarReserva();
-  console.log("Despues de cancelar las reservas");
-  console.log(reserves);
-  reserves.push({idReserv: 2, name: "Juan Baez",date:"2017-01-01",idTramo:2});
-  console.log("NEW");
-  console.log(reserves);
+  //console.log("Despues de cancelar las reservas");
+  //console.log(reserves);
+  //reserves.push({idReserv: ires, name: "Juan Baez",date:"2017-01-01",idTramo:3});
+  //console.log("NEW");
+  //console.log(reserves);
   console.log("Example app listening at http://%s:%s", host, port);
 
 });
+
