@@ -27,7 +27,7 @@ var disponible = function(cant, reservados){
 
 var server1 = 3;
 app.get('/list', function (req, res) {
-    fs.readFile( __dirname + "/datos/" + "tramos.json", 'utf8', function (err, data) {
+    fs.readFile( __dirname + "/datos/" + "tramos2.json", 'utf8', function (err, data) {
        res.end(data);
     });
 });
@@ -38,7 +38,7 @@ app.post('/reservation', function (req, res) {
    console.log(req.body);
    var travelId = req.body.travelId;
    var tramos;
-    fs.readFile( __dirname + "/data/" + "tramos.json", 'utf8', function (err, data) {
+    fs.readFile( __dirname + "/data/" + "tramos2.json", 'utf8', function (err, data) {
         tramos = JSON.parse( data );
     }); 
     if (disponible(tramos[travelId-1].places,tramos[travelId-1].reserved)) {
@@ -65,7 +65,7 @@ function cancelarReserva(){
         }
     }
 }
-var server = app.listen(8080, function () {
+var server = app.listen(8081, function () {
 
   var host = server.address().address;
   var port = server.address().port;
@@ -79,4 +79,3 @@ var server = app.listen(8080, function () {
   console.log("Example app listening at http://%s:%s", host, port);
 
 });
-
