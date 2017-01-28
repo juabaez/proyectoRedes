@@ -1,6 +1,29 @@
-{
-	"A-D" : {"seats":25, "price":210},
-	"A-C" : {"seats":22, "price":40},
-	"B-D" : {"seats":21, "price":310},
-	"B-C" : {"seats":17, "price":194}
-}
+[{
+  "originCity": "Río Cuarto",
+  "destinyCity": "Mendoza",
+  "price": 700,
+  "places": 160,
+  "reserved": 0,
+  "id": 5
+},{
+  "originCity": "Mendoza",
+  "destinyCity": "Río Cuarto",
+  "price": 700,
+  "places": 160,
+  "reserved": 0,
+  "id": 6
+}, {
+  "originCity": "Buenos Aires",
+  "destinyCity": "Rosario",
+  "price": 500,
+  "places": 160,
+  "reserved": 0,
+  "id": 7
+},  {
+  "originCity": "Rosario",
+  "destinyCity": "Río Cuarto",
+  "price": 500,
+  "places": 160,
+  "reserved": 0,
+  "id": 8
+}]
