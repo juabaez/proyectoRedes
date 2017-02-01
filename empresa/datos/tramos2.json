@@ -1,29 +1,30 @@
 [{
-  "originCity": "Río Cuarto",
-  "destinyCity": "Mendoza",
-  "price": 700,
-  "places": 160,
-  "reserved": 0,
+        
+  "cOrigen": "Río Cuarto",
+  "cDestino": "Mendoza",
+  "precio": 700,
+  "cantidad": 160,
+  "reservado": 1,
   "id": 5
 },{
-  "originCity": "Mendoza",
-  "destinyCity": "Río Cuarto",
-  "price": 700,
-  "places": 160,
-  "reserved": 0,
+  "cOrigen": "Mendoza",
+  "cDestino": "Río Cuarto",
+  "precio": 700,
+  "cantidad": 160,
+  "reservado": 1,
   "id": 6
 }, {
-  "originCity": "Buenos Aires",
-  "destinyCity": "Rosario",
-  "price": 500,
-  "places": 160,
-  "reserved": 0,
+  "cOrigen": "Buenos Aires",
+  "cDestino": "Rosario",
+  "precio": 500,
+  "cantidad": 160,
+  "reservado": 0,
   "id": 7
 },  {
-  "originCity": "Rosario",
-  "destinyCity": "Río Cuarto",
-  "price": 500,
-  "places": 160,
-  "reserved": 0,
+  "cOrigen": "Rosario",
+  "cDestino": "Río Cuarto",
+  "precio": 500,
+  "cantidad": 160,
+  "reservado": 0,
   "id": 8
 }]

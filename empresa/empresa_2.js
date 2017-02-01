@@ -17,8 +17,8 @@ app.use(function(req, res, next) {
 var reserves = [];
 var ires = 3;
 //Reservas base
-reserves.push({idReserv: 1, name: "Juan Baez",date:"2017-01-01",idTramo:1});
-reserves.push({idReserv: 2, name: "Juan Baez",date:"2017-01-01",idTramo:2});
+reserves.push({idReserv: 1, name: "Juan Baez",date:"2017-01-01",idTramo:5});
+reserves.push({idReserv: 2, name: "Juan Baez",date:"2017-01-01",idTramo:6});
 
 //Retorna si hay disponibles cierta cantidad de asientos en un tramo
 var disponible = function(cant, reservados){
@@ -70,7 +70,7 @@ function cancelarReserva(){
         }
     }
 }
-var server = app.listen(8080, function () {
+var server = app.listen(8081, function () {
 
   var host = server.address().address;
   var port = server.address().port;
@@ -81,7 +81,7 @@ var server = app.listen(8080, function () {
   //reserves.push({idReserv: ires, name: "Juan Baez",date:"2017-01-01",idTramo:3});
   //console.log("NEW");
   //console.log(reserves);
-  console.log("Example app listening at http://%s:%s", host, port);
+  console.log("Listen http://localhost:%s", port);
 
 });
 

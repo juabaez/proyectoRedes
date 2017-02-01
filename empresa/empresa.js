@@ -81,7 +81,7 @@ var server = app.listen(8080, function () {
   //reserves.push({idReserv: ires, name: "Juan Baez",date:"2017-01-01",idTramo:3});
   //console.log("NEW");
   //console.log(reserves);
-  console.log("Example app listening at http://%s:%s", host, port);
+  console.log("Listen http://localhost:%s", port);
 
 });
 
