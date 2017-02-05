@@ -84,7 +84,3 @@ function reserveTravels(path){
     xhttp.send(JSON.stringify({travelId:travelInPath.id, time_stamp:time_stamp}));
   }
 }
-
-function agregar() {
-    return ["hola","pepe"];
-}

@@ -39,6 +39,7 @@ app.get('/', function (req, res) {
     var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     var xhr = new XMLHttpRequest();
     for (var i=0; i < empresas.length; i++) {
+        console.log(empresas[i]);
         var serverUrl = empresas[i];
 
         xhr.serverUrl = serverUrl;
@@ -52,15 +53,22 @@ app.get('/', function (req, res) {
         xhr.send();
     }
     res.render('index',
-    { title : 'Home', ciudades: ciudades}
+    { title : 'Index', ciudades: ciudades}
     );
 });
 
 app.listen(3000);
 
 function agregarCiudad(tramos){
-    ciudades.push("juan");
-    console.log("Origen: "+tramos[0].cOrigen+" Destino: "+tramos[0].cDestino);
+    for (var i = 0; i < tramos.length; i++) {
+        console.log("Origen: "+tramos[i].cOrigen+" Destino: "+tramos[i].cDestino+ " "+tramos[i].id);
+        if (!contiene(tramos[i].cOrigen)) {
+            ciudades.push(tramos[i].cOrigen);
+        }
+        if (!contiene(tramos[i].cDestino)) {
+            ciudades.push(tramos[i].cDestino);
+        }
+    }
 }
 
 function contiene(ciudad){
