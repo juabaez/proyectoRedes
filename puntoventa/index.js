@@ -4,6 +4,7 @@
 /* global __dirname, ciudades */
 
 var express = require('express');
+var xml = require('xmlhttprequest');
 var stylus = require('stylus');
 var nib = require('nib');
 
@@ -24,51 +25,41 @@ app.use(stylus.middleware(
   }
 ));
 
+app.use(stylus.middleware(
+  { src: __dirname + '/public/js'
+  , compile: compile
+  }
+));
 app.use(express.static(__dirname + '/public'));
 
-var empresas = ["http://localhost:8080","http://localhost:8081","http://localhost:8082"];
 
-//ciudades = ["Río Cuarto", "Córdoba", "Buenos Aires", "Rosario", "Rio de Janeiro", "Brasilia","New York", "Los Angeles"];
-var ciudades = function(){
+var empresas = ["http://localhost:8080","http://localhost:8081","http://localhost:8082"];
+var ciudades = [];
+app.get('/', function (req, res) {
+    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    var xhr = new XMLHttpRequest();
     for (var i=0; i < empresas.length; i++) {
         var serverUrl = empresas[i];
 
-        var xhttp = new XMLHttpRequest();
-        xhttp.serverUrl = serverUrl;
-        xhttp.onreadystatechange = function() {
+        xhr.serverUrl = serverUrl;
+        xhr.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
             var jsonTramos = JSON.parse(this.responseText);
             agregarCiudad(jsonTramos);
           }
         };
-        xhttp.open("GET", serverUrl+"/list", true);
-        xhttp.send();
+        xhr.open("GET", serverUrl+"/list", false);
+        xhr.send();
     }
-};
-  
-app.get('/', function (req, res) {
-  res.render('index',
-  { title : 'Home', ciudades: ciudades}
-  );
+    res.render('index',
+    { title : 'Home', ciudades: ciudades}
+    );
 });
+
 app.listen(3000);
 
-app.get('/add', function (req, res) {
-    var serverUrl = "http://localhost:8080";
-
-    var xhttp = new XMLHttpRequest();
-    xhttp.serverUrl = serverUrl;
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        var jsonTramos = JSON.parse(this.responseText);
-        agregarCiudad(jsonTramos);
-      }
-    };
-    xhttp.open("GET", serverUrl+"/list", true);
-    xhttp.send();
-});
 function agregarCiudad(tramos){
-    
+    ciudades.push("juan");
     console.log(tramos[0].cOrigen);
 }
 

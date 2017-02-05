@@ -1,0 +1,23 @@
+extend layout
+block content
+  script(rel='js',type='text/javascript',src='/js/graphlib.min.js')
+  script(rel='js',type='text/javascript',src='/js/travels-functions.js')
+  script(rel='js',type='text/javascript',src='/js/graph-operations.js')
+  script(rel='js',type='text/javascript',src='/js/view-operations.js')
+  - function agregarC(){ return ["hola","pepe"]};
+  
+  t2 Origin: &nbsp;
+  select#origin
+    each city, i in ciudades
+      option(value=i) #{city} 
+  &nbsp; &nbsp;
+  t2 Destiny: &nbsp;
+  select#destiny
+    each city, i in ciudades
+      option(value=i) #{city}
+  &nbsp;
+  button(onclick="searchTravels()") Buscar
+  br
+  br
+  #travelsTable
+block sidebar
