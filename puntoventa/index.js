@@ -60,7 +60,7 @@ app.listen(3000);
 
 function agregarCiudad(tramos){
     ciudades.push("juan");
-    console.log(tramos[0].cOrigen);
+    console.log("Origen: "+tramos[0].cOrigen+" Destino: "+tramos[0].cDestino);
 }
 
 function contiene(ciudad){
