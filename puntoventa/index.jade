@@ -2,7 +2,7 @@ doctype
 html
   head
     title #{title}
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/style/main.css')
   body
     header
       h1 Venta De Pasajes
@@ -17,17 +17,16 @@ html
             select#origin
               each city, i in ciudades
                 option(value=i) #{city} 
-            &nbsp; &nbsp;
+            br
             t2 Destino: &nbsp;
             select#destiny
               each city, i in ciudades
                 option(value=i) #{city}
-            &nbsp;
+            br
             button(onclick="searchTravels()") Buscar
             br
             br
-            #travelsTable
+            #table
       .sidebar
         block sidebar
     footer
-      p Running on node with Express, Jade and Stylus

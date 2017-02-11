@@ -14,9 +14,8 @@ function compile(str, path) {
     .set('filename', path)
     .use(nib());
 }
-app.set('views', __dirname + '/vista');
+app.set('views', __dirname);
 app.set('view engine', 'jade');
-//app.use(express.logger('dev'));
 logger = require('morgan');
 app.use(logger('dev'));
 app.use(stylus.middleware(
