@@ -39,7 +39,7 @@ app.post('/reservation', function (req, res) {
     cancelarReserva();
     var travelId = req.body.travelId;
     var tramos;
-    fs.readFile( __dirname + "/data/" + "tramos.json", 'utf8', function (err, data) {
+    fs.readFile( __dirname + "/datos/" + "tramos.json", 'utf8', function (err, data) {
         tramos = JSON.parse( data );
     }); 
     if (disponible(tramos[travelId-1].places,tramos[travelId-1].reserved)) {

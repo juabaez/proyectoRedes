@@ -27,7 +27,7 @@ var disponible = function(cant, reservados){
 
 var server1 = 3;
 app.get('/list', function (req, res) {
-    fs.readFile( __dirname + "/datos/" + "tramos.json", 'utf8', function (err, data) {
+    fs.readFile( __dirname + "/datos/" + "tramos2.json", 'utf8', function (err, data) {
        res.end(data);
     });
 });
@@ -39,7 +39,7 @@ app.post('/reservation', function (req, res) {
     cancelarReserva();
     var travelId = req.body.travelId;
     var tramos;
-    fs.readFile( __dirname + "/data/" + "tramos.json", 'utf8', function (err, data) {
+    fs.readFile( __dirname + "/datos/" + "tramos2.json", 'utf8', function (err, data) {
         tramos = JSON.parse( data );
     }); 
     if (disponible(tramos[travelId-1].places,tramos[travelId-1].reserved)) {
