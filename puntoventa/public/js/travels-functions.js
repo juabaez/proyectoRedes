@@ -1,4 +1,4 @@
-var enterpriseServers = ["http://localhost:8081","http://localhost:8082"];
+var enterpriseServers = ["http://localhost:8080","http://localhost:8081","http://localhost:8082"];
 
 var travels = new graphlib.Graph(); // creates a graph
 var paths = [];
@@ -18,7 +18,7 @@ function searchTravels() {
   var originCity = originSelect.options[originSelect.value].text;
   var destinyCity = destinySelect.options[destinySelect.value].text;
   
-  console.log('Searching from '+originCity+' to '+destinyCity);
+  console.log('Origen: '+originCity+' - Destino: '+destinyCity);
 
   for (var i=0; i < enterpriseServers.length; i++) {
     var serverUrl = enterpriseServers[i];

@@ -14,7 +14,7 @@ function compile(str, path) {
     .set('filename', path)
     .use(nib());
 }
-app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/vista');
 app.set('view engine', 'jade');
 //app.use(express.logger('dev'));
 logger = require('morgan');
@@ -53,7 +53,7 @@ app.get('/', function (req, res) {
         xhr.send();
     }
     res.render('index',
-    { title : 'Index', ciudades: ciudades}
+    { title : 'Venta De Pasajes', ciudades: ciudades}
     );
 });
 
