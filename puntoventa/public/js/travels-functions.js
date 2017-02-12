@@ -69,14 +69,14 @@ function reservar(path){
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        console.log("RESERVA RESPONSE");
-        console.log(this.responseText);
+        console.log("RESERVA RESPONSE: " + this.responseText);
       }
     };
-    xhttp.open("POST", tramo.providerUrl +"/reservar", true);
+    xhttp.open("POST", tramo.providerUrl +"/reservar", false);
     xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.send(JSON.stringify({tramoId:tramo.id}));
-  }
+    //xhttp.send(JSON.stringify({tramoId:tramo.id}));
+    xhttp.send(JSON.stringify(tramo));
+    }
 }
 
 function addTramoTable(paths){
