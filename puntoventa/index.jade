@@ -12,7 +12,6 @@ html
             script(rel='js',type='text/javascript',src='/js/graphlib.min.js')
             script(rel='js',type='text/javascript',src='/js/travels-functions.js')
             script(rel='js',type='text/javascript',src='/js/graph-operations.js')
-            script(rel='js',type='text/javascript',src='/js/view-operations.js')
             t2 Origen: &nbsp;
             select#origin
               each city, i in ciudades
@@ -23,7 +22,7 @@ html
               each city, i in ciudades
                 option(value=i) #{city}
             br
-            button(onclick="searchTravels()") Buscar
+            button(onclick="buscar()") Buscar
             br
             br
             #table
