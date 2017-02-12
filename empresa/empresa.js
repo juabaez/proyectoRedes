@@ -39,26 +39,17 @@ app.post('/reservar', function (req, res) {
     console.log(req.params);
     console.log(req.body);
     cancelarReserva();
-    var tramoId = req.body.tramoId;
     var tramos;
-    //Normalizing the path for windows environment
-    var normalPath = path.normalize( __dirname + "/datos/" + 'tramos.json');
-    fs.readFile( normalPath, 'utf8', function (err, data) {
-        //tramos = JSON.parse(data);
-        tramos = data;
-    }); 
-    console.log(tramos);
-    console.log("cantidad "+tramos[tramoId].cantidad +" "+tramos[tramoId].reservado);
-    console.log(disponible(tramos[tramoId].cantidad,tramos[tramoId].reservado));
-    /*if (disponible(tramos[tramoId-1].places,tramos[tramoId-1].reserved)) {
-        reservas.push({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),idTramo:tramoId-1});
+    tramos = req.body;
+    if (disponible(tramos.cantidad,tramos.reservado)) {
+        reservas.push({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),idTramo:tramos.id});
         console.log(reservas);
-        actualizarReservas(tramos,tramoId-1);
+        actualizarReservas(tramos,tramos.id);
         ires++;
         res.end("OK");
     } else {
         res.end("FALLO");
-    }*/
+    }
 });
 
 function cancelarReserva(){
@@ -83,14 +74,15 @@ function cancelarReserva(){
 }
 
 function actualizarReservas(tramos,idTramo){
+    var res = [];
     for (var i = 0; i < tramos.length; i++) {
         if (tramos[i].id == idTramo) {
             tramos[i].cantidad = tramos[i].cantidad - 1;
             tramos[i].reservado = tramos[i].reservado + 1;
-            break;
         }
+        res = tramos [i];
     }
-    fs.writeFile(__dirname + "/datos/" + "tramos.json",JSON.stringify(tramos),function(error){
+    fs.writeFile(__dirname + "/datos/" + "tramos.json",JSON.stringify(res),function(error){
         if (error)
             console.log(error);
         else
