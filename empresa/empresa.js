@@ -41,8 +41,12 @@ app.post('/reservar', function (req, res) {
     cancelarReserva();
     var tramos;
     tramos = req.body;
+//    console.log(tramos.cantidad);
+//    console.log("cantidad "+tramos.cantidad +" "+tramos.reservado);
+//    console.log(disponible(tramos.cantidad,tramos.reservado));
     if (disponible(tramos.cantidad,tramos.reservado)) {
         reservas.push({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),idTramo:tramos.id});
+        console.log("RESERVA AGREGADA");
         console.log(reservas);
         actualizarReservas(tramos,tramos.id);
         ires++;
@@ -69,20 +73,24 @@ function cancelarReserva(){
             ires=1;
         }
     }
-    console.log("Reservas luego de cancelarlas automaticamente");
+    console.log("Reservas luego de cancelarlas automaticamente:");
     console.log(reservas);
 }
 
 function actualizarReservas(tramos,idTramo){
     var res = [];
+    tramos = JSON.parse(fs.readFileSync(__dirname + "/datos/" + "tramos_Res_Actual.json", 'utf8'));
+    //console.log("Length: "+tramos.length);
     for (var i = 0; i < tramos.length; i++) {
         if (tramos[i].id == idTramo) {
             tramos[i].cantidad = tramos[i].cantidad - 1;
             tramos[i].reservado = tramos[i].reservado + 1;
         }
-        res = tramos [i];
+        //console.log(tramos[i]);
+        res.push(tramos[i]);
     }
-    fs.writeFile(__dirname + "/datos/" + "tramos.json",JSON.stringify(res),function(error){
+    //console.log(res);
+    fs.writeFile(__dirname + "/datos/" + "tramos_Res_Actual.json",JSON.stringify(res),function(error){
         if (error)
             console.log(error);
         else
