@@ -32,7 +32,7 @@ app.get('/list', function (req, res) {
     });
 });
 
-app.post('/reservation', function (req, res) {
+app.post('/reservar', function (req, res) {
    // Get the travel, and make the reservation if it can be done.
     console.log(req.params);
     console.log(req.body);
@@ -44,6 +44,8 @@ app.post('/reservation', function (req, res) {
     }); 
     if (disponible(tramos[travelId-1].places,tramos[travelId-1].reserved)) {
         reserves.push({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),idTramo:travelId-1});
+        console.log("Nueva Reserva: " +
+                {idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),idTramo:travelId-1});
         ires++;
         res.end("OK");
     } else {
