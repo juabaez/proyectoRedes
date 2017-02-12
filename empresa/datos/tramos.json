@@ -2,14 +2,14 @@
   "cOrigen": "Río Cuarto",
   "cDestino": "Buenos Aires",
   "precio": 800,
-  "cantidad": 160,
+  "cantidad": 159,
   "reservado": 1,
   "id": 1
 },{
   "cOrigen": "Buenos Aires",
   "cDestino": "Río Cuarto",
   "precio": 800,
-  "cantidad": 160,
+  "cantidad": 159,
   "reservado": 1,
   "id": 2
 },{

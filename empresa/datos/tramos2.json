@@ -3,14 +3,14 @@
   "cOrigen": "Río Cuarto",
   "cDestino": "Mendoza",
   "precio": 700,
-  "cantidad": 160,
+  "cantidad": 159,
   "reservado": 1,
   "id": 5
 },{
   "cOrigen": "Mendoza",
   "cDestino": "Río Cuarto",
   "precio": 700,
-  "cantidad": 160,
+  "cantidad": 159,
   "reservado": 1,
   "id": 6
 }, {
