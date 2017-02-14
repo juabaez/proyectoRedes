@@ -1,0 +1,24 @@
+doctype
+html
+  head
+    title #{title}
+    link(rel='stylesheet', href='/style/main.css')
+  body
+    header
+      h1 Venta De Pasajes
+    .container
+      .main-content
+        block content
+            script(rel='js',type='text/javascript',src='/js/graphlib.min.js')
+            script(rel='js',type='text/javascript',src='/js/travels-functions.js')
+            script(rel='js',type='text/javascript',src='/js/graph-operations.js')
+            t2 Reservas: &nbsp;
+            select#reserva
+              each reserva, i in reservas
+                option #{reserva} 
+            br
+            button(onclick="completarReserva()") Completar Reserva
+            #table
+      .sidebar
+        block sidebar
+    footer

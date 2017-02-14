@@ -31,7 +31,6 @@ app.use(stylus.middleware(
 ));
 app.use(express.static(__dirname + '/public'));
 
-
 var empresas = ["http://localhost:8080","http://localhost:8081","http://localhost:8082"];
 var ciudades = [];
 app.get('/', function (req, res) {
@@ -56,7 +55,38 @@ app.get('/', function (req, res) {
     );
 });
 
+var reservas = [];
+app.get('/reservas', function (req, res) {
+    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    var xhr = new XMLHttpRequest();
+    for (var i=0; i < empresas.length; i++) {
+        console.log(empresas[i]);
+        var serverUrl = empresas[i];
+        xhr.serverUrl = serverUrl;
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            var jsonTramos = JSON.parse(this.responseText);
+            agregarReservas(jsonTramos);
+          }
+        };
+        xhr.open("GET", serverUrl+"/listReservas", false);
+        xhr.send();
+    }
+    res.render('reservas',
+    { title : 'Venta De Pasajes', reservas: reservas}
+    );
+});
+
 app.listen(3000);
+
+function agregarReservas(reservasjson){
+    for (var i = 0; i < reservasjson.length; i++) {
+        console.log("Id Reserva: "+reservasjson[i].idReserv+" Nombre: "+reservasjson[i].name);
+        if(reservasjson[i].estado=="E"){
+            reservas.push(reservasjson[i].idReserv+" - "+reservasjson[i].name);
+        }
+    }
+}
 
 function agregarCiudad(tramos){
     for (var i = 0; i < tramos.length; i++) {
@@ -80,83 +110,3 @@ function contiene(ciudad){
     }
     return contiene;
 }
-// console.log(companies.empresa1.host);
-// console.log(companies.empresa1.port);
-// console.log(companies.empresa1.stretches);
-
-// var stretches = // GET a resource
-// 	unirest.get(companies.empresa1.host + ':' + companies.empresa1.port + companies.empresa1.stretches)
-//   	.end(function(res) {
-//     	if (res.error) {
-//       		console.log('GET error', res.error)
-//     	} else {
-//       		console.log('GET response', res.body)
-//     	}
-//   	})
-
-var graph = function(){
-	var result = {};
-        var s;
-	for (s in stretches){
-		var arr = s.split('-');
-		if (!result[arr[0]]){
-			result[arr[0]] = [];
-		}
-	}
-	for (s in stretches){
-		var arr = s.split('-');
-		result[arr[0]].push(arr[1]);
-		
-	}
-	return result;
-};
-
-var stretches = function(callback){
-	var result = {};
-        var c;
-	for (c in companies){
-		var url = 'http://' + companies[c].host + ':' + companies[c].port + companies[c].stretches;
-		unirest.get(url).end(function(res) {
-    	if (res.error) {
-      		console.log('Error GET stretches');
-    	} else {
-      		extend(result, res.body);
-      		//console.log(stretches);
-      		//console.log(graph());
-      		//return res.body;
-    	}
-  		});
-
-		
-	}
-};
-
-// var graph = {'A': ['B', 'C'],
-//              'B': ['C', 'D'],
-//              'C': ['D'],
-//              'D': ['C'],
-//              'E': ['F'],
-//              'F': ['C']};
-
-var find_all_paths = function(graph, start, end, path){
-	path = path.concat([start]); // + [start];
-	if (start == end){
-		return [path];
-	}
-	if (!graph[start]){
-		return [];
-	}
-	var paths = [];
-	for (n in graph[start]){
-		var node = graph[start][n];
-		if (!(node in path)){
-			var newpaths = find_all_paths(graph, node, end, path);
-			for (newpath in newpaths){
-				paths.push(newpaths[newpath]);
-			}
-		}
-	}
-	return paths;
-};
-
-//console.log(find_all_paths(graph(), 'B', 'C', []));

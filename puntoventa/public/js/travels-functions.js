@@ -29,11 +29,6 @@ function buscar() {
   }
 }
 
-/**
- * findTravels(cOrigen,cDestino,jsonTravels,serverUrl): this function calculates all the possible ways
- * to go from the cOrigen to the cDestino according the current travels information and the given
- * in jsonTravels.
- */
 function findTravels(cOrigen,cDestino,tramos,serverUrl) {
   addGrafo(tramos,serverUrl);
   paths = [];
@@ -41,9 +36,6 @@ function findTravels(cOrigen,cDestino,tramos,serverUrl) {
   addTramoTable(paths);
 }
 
-/**
- * saveTravels(cOrigen,cDestino,tramos): this function saves the given travels to the travels graph.
- */
 function addGrafo(tramos,serverUrl) {
   var i;
   for(i = 0; i < tramos.length; i++) {
@@ -59,9 +51,6 @@ function addGrafo(tramos,serverUrl) {
   }
 }
 
-/**
- * reserveTravels(path): reserve the travels in the given path.
- */
 function reservar(path){
   for(var i=0; i < path.length-1; i++) {
     var tramo = grafoTramos.edge({ v: path[i], w: path[i+1] });
@@ -74,7 +63,6 @@ function reservar(path){
     };
     xhttp.open("POST", tramo.providerUrl +"/reservar", false);
     xhttp.setRequestHeader("Content-Type", "application/json");
-    //xhttp.send(JSON.stringify({tramoId:tramo.id}));
     xhttp.send(JSON.stringify(tramo));
     }
 }
@@ -127,9 +115,33 @@ function addTramoTable(paths){
         buttonReserva.onclick = function(){
             reservar(this.travel);
         };
+        pathTr.appendChild(pathTd);
+        tableDiv.appendChild(pathTable);
         tableDiv.appendChild(buttonReserva);
+        tableDiv.appendChild(buttonCompletar);
         tableDiv.appendChild(document.createElement('BR'));
         tableDiv.appendChild(document.createElement('BR'));
     }
 
+}
+
+function completarReserva() {
+  var i = document.getElementById("reserva").selectedIndex;
+  console.log("Obtener las reservas "+document.getElementsByTagName("option")[i].value);
+  var reserv = document.getElementsByTagName("option")[i].value;
+  reserv = reserv.split(" - ");
+  console.log("Primera parte "+reserv[0]+" segunda parte "+reserv[1]);
+   for (var i=0; i < empresas.length; i++) {
+    var serverUrl = empresas[i];
+    var xhttp = new XMLHttpRequest();
+    xhttp.serverUrl = serverUrl;
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            alert("Reserva completada");
+        }
+    };
+    xhttp.open("POST", serverUrl+"/completarreservas", true);
+    xhttp.setRequestHeader("Content-Type", "application/json");
+    xhttp.send(JSON.stringify({idres:reserv[0]}));
+  }
 }

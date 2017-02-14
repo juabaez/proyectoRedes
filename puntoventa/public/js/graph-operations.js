@@ -1,6 +1,3 @@
-/**
- * findAllPaths(graph,originNode,destinyNode,visited): find all paths between originNode and destinyNode
- */
 function findAllPaths(graph,originNode,destinyNode,visited){
   var i;
   var successors = graph.successors(originNode);
@@ -17,9 +14,6 @@ function findAllPaths(graph,originNode,destinyNode,visited){
   }
 }
 
-/*
- * nodeVisited(visited,node): determine if the given node was already visited
- */
 function nodeVisited(visited,node) {
   var i;
   for (i = 0; i < visited.length ; i++) {
