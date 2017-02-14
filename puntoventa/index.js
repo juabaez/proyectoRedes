@@ -39,7 +39,6 @@ app.get('/', function (req, res) {
     for (var i=0; i < empresas.length; i++) {
         console.log(empresas[i]);
         var serverUrl = empresas[i];
-
         xhr.serverUrl = serverUrl;
         xhr.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
@@ -55,8 +54,9 @@ app.get('/', function (req, res) {
     );
 });
 
-var reservas = [];
+var reservas;
 app.get('/reservas', function (req, res) {
+    reservas = [];
     var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
     var xhr = new XMLHttpRequest();
     for (var i=0; i < empresas.length; i++) {
@@ -65,8 +65,8 @@ app.get('/reservas', function (req, res) {
         xhr.serverUrl = serverUrl;
         xhr.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
-            var jsonTramos = JSON.parse(this.responseText);
-            agregarReservas(jsonTramos);
+            var jsonReservas = JSON.parse(this.responseText);
+            agregarReservas(jsonReservas,serverUrl);
           }
         };
         xhr.open("GET", serverUrl+"/listReservas", false);
@@ -79,11 +79,34 @@ app.get('/reservas', function (req, res) {
 
 app.listen(3000);
 
-function agregarReservas(reservasjson){
+function agregarReservas(reservasjson,url){
+    var jsonTramos;
+    var tramo;
+    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    var xhr = new XMLHttpRequest();
+    var serverUrl = url;
+    var estado = false;
+    xhr.serverUrl = serverUrl;
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+        jsonTramos = JSON.parse(this.responseText);
+        estado = true;
+        }
+    };
+    xhr.open("GET", url+"/list", false);
+    xhr.send();
     for (var i = 0; i < reservasjson.length; i++) {
         console.log("Id Reserva: "+reservasjson[i].idReserv+" Nombre: "+reservasjson[i].name);
+        if (estado){
+            for (var j = 0; j < jsonTramos.length; j++) {
+                if (jsonTramos[j].id==reservasjson[i].idTramo) {
+                    tramo = " | "+ jsonTramos[i].cOrigen + " - " + jsonTramos[i].cDestino;
+                    break;
+                }
+            }
+        }
         if(reservasjson[i].estado=="E"){
-            reservas.push(reservasjson[i].idReserv+" - "+reservasjson[i].name);
+            reservas.push(reservasjson[i].idReserv+" - "+reservasjson[i].name + tramo);
         }
     }
 }

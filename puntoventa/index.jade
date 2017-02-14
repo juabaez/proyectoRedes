@@ -1,31 +1,20 @@
-doctype
-html
-  head
-    title #{title}
-    link(rel='stylesheet', href='/style/main.css')
-  body
-    header
-      h1 Venta De Pasajes
-    .container
-      .main-content
-        block content
-            script(rel='js',type='text/javascript',src='/js/graphlib.min.js')
-            script(rel='js',type='text/javascript',src='/js/travels-functions.js')
-            script(rel='js',type='text/javascript',src='/js/graph-operations.js')
-            t2 Origen: &nbsp;
-            select#origin
-              each city, i in ciudades
-                option(value=i) #{city} 
-            br
-            t2 Destino: &nbsp;
-            select#destiny
-              each city, i in ciudades
-                option(value=i) #{city}
-            br
-            button(onclick="buscar()") Buscar
-            br
-            br
-            #table
-      .sidebar
-        block sidebar
-    footer
+extend layoutIndex
+block content
+    script(rel='js',type='text/javascript',src='/js/graphlib.min.js')
+    script(rel='js',type='text/javascript',src='/js/funcionesCliente.js')
+    script(rel='js',type='text/javascript',src='/js/operacionesGrafo.js')
+    t2 Origen: &nbsp;
+    select#origin
+      each city, i in ciudades
+        option(value=i) #{city} 
+    br
+    t2 Destino: &nbsp;
+    select#destiny
+      each city, i in ciudades
+        option(value=i) #{city}
+    br
+    button(onclick="buscar()") Buscar
+    br
+    br
+    #table
+block sidebar

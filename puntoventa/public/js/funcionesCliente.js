@@ -58,7 +58,9 @@ function reservar(path){
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
-        console.log("RESERVA RESPONSE: " + this.responseText);
+        console.log("RESERVA PASAJE: " + this.responseText);
+        alert("RESERVA PASAJE: " + this.responseText);
+        javascript:location.reload();
       }
     };
     xhttp.open("POST", tramo.providerUrl +"/reservar", false);
@@ -105,7 +107,6 @@ function addTramoTable(paths){
             travelTr.appendChild(origenTd);
             travelTr.appendChild(destinoTd);
         }
-
         pathTr.appendChild(pathTd);
         tableDiv.appendChild(pathTable);
         var buttonReserva = document.createElement('BUTTON');
@@ -118,7 +119,6 @@ function addTramoTable(paths){
         pathTr.appendChild(pathTd);
         tableDiv.appendChild(pathTable);
         tableDiv.appendChild(buttonReserva);
-        tableDiv.appendChild(buttonCompletar);
         tableDiv.appendChild(document.createElement('BR'));
         tableDiv.appendChild(document.createElement('BR'));
     }
@@ -126,22 +126,24 @@ function addTramoTable(paths){
 }
 
 function completarReserva() {
-  var i = document.getElementById("reserva").selectedIndex;
-  console.log("Obtener las reservas "+document.getElementsByTagName("option")[i].value);
-  var reserv = document.getElementsByTagName("option")[i].value;
-  reserv = reserv.split(" - ");
-  console.log("Primera parte "+reserv[0]+" segunda parte "+reserv[1]);
-   for (var i=0; i < empresas.length; i++) {
-    var serverUrl = empresas[i];
-    var xhttp = new XMLHttpRequest();
-    xhttp.serverUrl = serverUrl;
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            alert("Reserva completada");
-        }
-    };
-    xhttp.open("POST", serverUrl+"/completarreservas", true);
-    xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.send(JSON.stringify({idres:reserv[0]}));
-  }
+    var i = document.getElementById("reserva").selectedIndex;
+    console.log("Obtener las reservas "+document.getElementsByTagName("option")[i].value);
+    var reserv = document.getElementsByTagName("option")[i].value;
+    reserv = reserv.split(" - ");
+    //console.log("Primera parte "+reserv[0]+" segunda parte "+reserv[1]);
+    for (var i=0; i < empresas.length; i++) {
+        var serverUrl = empresas[i];
+        var xhttp = new XMLHttpRequest();
+        xhttp.serverUrl = serverUrl;
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("Reserva Completa: "+ this.responseText);
+                alert("Reserva Completa: "+ this.responseText);
+                javascript:location.reload();
+            }
+        };
+        xhttp.open("POST", serverUrl+"/completarreservas", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(JSON.stringify({idres:reserv[0]}));
+    }
 }
