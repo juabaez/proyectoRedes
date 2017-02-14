@@ -16,8 +16,8 @@
   "cOrigen": "Buenos Aires",
   "cDestino": "Montevideo",
   "precio": 1000,
-  "cantidad": 160,
-  "reservado": 0,
+  "cantidad": 159,
+  "reservado": 1,
   "id": 3
 },{
   "cOrigen": "Montevideo",

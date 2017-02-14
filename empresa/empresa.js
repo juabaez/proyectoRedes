@@ -19,8 +19,9 @@ app.use(function(req, res, next) {
 var reservas = [];
 var ires = 3;
 //Reservas base
-reservas.push({idReserv: 1, name: "Juan Baez",date:"2017-01-01",idTramo:1});
-reservas.push({idReserv: 2, name: "Juan Baez",date:"2017-01-01",idTramo:2});
+reservas.push({idReserv: 1, name: "Juan Baez",date:"2017-01-01",estado:"E",idTramo:1});
+reservas.push({idReserv: 2, name: "Laura Rosas",date:"2017-01-03",estado:"E",idTramo:2});
+reservas.push({idReserv: 3, name: "Eduardo Juarez",date:"2017-01-03",estado:"C",idTramo:3});
 
 //Retorna si hay disponibles cierta cantidad de asientos en un tramo
 var disponible = function(cant, reservados){
@@ -35,6 +36,15 @@ app.get('/list', function (req, res) {
     
 });
 
+app.get('/listReservas', function (req, res) {
+     res.end(JSON.stringify(reservas));
+});
+
+app.post('/completarreservas', function (req, res) {
+    console.log(req.params);
+    console.log(req.body);
+});
+
 app.post('/reservar', function (req, res) {
     console.log(req.params);
     console.log(req.body);
@@ -45,7 +55,7 @@ app.post('/reservar', function (req, res) {
 //    console.log("cantidad "+tramos.cantidad +" "+tramos.reservado);
 //    console.log(disponible(tramos.cantidad,tramos.reservado));
     if (disponible(tramos.cantidad,tramos.reservado)) {
-        reservas.push({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),idTramo:tramos.id});
+        reservas.push({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),estado:"E",idTramo:tramos.id});
         console.log("RESERVA AGREGADA");
         console.log(reservas);
         actualizarReservas(tramos,tramos.id);
@@ -66,7 +76,7 @@ function cancelarReserva(){
         diffDate = diffDate.toPrecision(2)-1;
         console.log("Diff dias para cancelar: "+diff);
         console.log("Diff entre hoy y la reserva: "+diffDate);
-        if (diffDate>diff) {
+        if (diffDate>diff && reservas[estado]=="E") {
             reservas.pop();
         }
         if(reservas.length===0){
