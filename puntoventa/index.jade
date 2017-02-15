@@ -4,14 +4,14 @@ block content
     script(rel='js',type='text/javascript',src='/js/funcionesCliente.js')
     script(rel='js',type='text/javascript',src='/js/operacionesGrafo.js')
     t2 Origen: &nbsp;
-    select#origin
-      each city, i in ciudades
-        option(value=i) #{city} 
+    select#origen
+      each ciud, i in ciudades
+        option(value=i) #{ciud} 
     br
     t2 Destino: &nbsp;
-    select#destiny
-      each city, i in ciudades
-        option(value=i) #{city}
+    select#destino
+      each ciud, i in ciudades
+        option(value=i) #{ciud}
     br
     button(onclick="buscar()") Buscar
     br

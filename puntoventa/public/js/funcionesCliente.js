@@ -5,8 +5,8 @@ var paths = [];
 
 
 function buscar() {
-  var paramOrigen = document.getElementById("origin");
-  var paramDestino = document.getElementById("destiny");
+  var paramOrigen = document.getElementById("origen");
+  var paramDestino = document.getElementById("destino");
   
   var cOrigen = paramOrigen.options[paramOrigen.value].text;
   var cDestino = paramDestino.options[paramDestino.value].text;
@@ -21,7 +21,7 @@ function buscar() {
     xhttp.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
         var tramos = JSON.parse(this.responseText);
-        findTravels(cOrigen,cDestino,tramos,this.serverUrl);
+        generarTramos(cOrigen,cDestino,tramos,this.serverUrl);
       }
     };
     xhttp.open("GET", serverUrl+"/list", true);
@@ -29,10 +29,10 @@ function buscar() {
   }
 }
 
-function findTravels(cOrigen,cDestino,tramos,serverUrl) {
+function generarTramos(cOrigen,cDestino,tramos,serverUrl) {
   addGrafo(tramos,serverUrl);
   paths = [];
-  findAllPaths(grafoTramos,cOrigen,cDestino,[cOrigen]);
+  allTramosGrafo(grafoTramos,cOrigen,cDestino,[cOrigen]);
   addTramoTable(paths);
 }
 
@@ -63,7 +63,7 @@ function reservar(path){
         javascript:location.reload();
       }
     };
-    xhttp.open("POST", tramo.providerUrl +"/reservar", false);
+    xhttp.open("POST", tramo.providerUrl +"/reservar", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(JSON.stringify(tramo));
     }

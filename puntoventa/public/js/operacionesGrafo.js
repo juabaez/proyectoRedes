@@ -1,23 +1,23 @@
-function findAllPaths(graph,originNode,destinyNode,visited){
+function allTramosGrafo(grafo,nodoOrigen,nodoDestino,visitados){
   var i;
-  var successors = graph.successors(originNode);
-  for(i = 0; i < successors.length; i++) {
-    var successor = successors[i];
-    if (successor === destinyNode) {
-      var pathFound = visited.concat([destinyNode]);
-      paths.push(pathFound);
+  var sucesores = grafo.successors(nodoOrigen);
+  for(i = 0; i < sucesores.length; i++) {
+    var sucesor = sucesores[i];
+    if (sucesor === nodoDestino) {
+      var encontrado = visitados.concat([nodoDestino]);
+      paths.push(encontrado);
     } else {
-      if (!nodeVisited(visited,successor)) {
-        findAllPaths(graph,successor,destinyNode,visited.concat([successor]));
+      if (!isVisitado(visitados,sucesor)) {
+        allTramosGrafo(grafo,sucesor,nodoDestino,visitados.concat([sucesor]));
       }
     }
   }
 }
 
-function nodeVisited(visited,node) {
+function isVisitado(visitado,nodo) {
   var i;
-  for (i = 0; i < visited.length ; i++) {
-    if (visited[i] === node)
+  for (i = 0; i < visitado.length ; i++) {
+    if (visitado[i] === nodo)
       return true;
   }
   return false;
