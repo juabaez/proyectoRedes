@@ -46,6 +46,7 @@ app.get('/listReservas', function (req, res) {
             j++;
         }
     }
+    console.log("Reservas a completar / cancelar");
     console.log(resAux);
     res.end(JSON.stringify(resAux));
 });
@@ -59,7 +60,7 @@ app.post('/completarreservas', function (req, res) {
         //console.log("Reserva en servidor "+reservas[i].idReserv + " Reserva a completar "+ idReservaCom.idres);
         if (reservas[i].idReserv == idReservaCom.idres) {
             if (reservas[i].estado == "E"){
-                reservas[i].estado = "C";
+                cambiarEstadoReserva(i,"C");
                 resp = "OK";
                 break;
             }else{
@@ -67,6 +68,28 @@ app.post('/completarreservas', function (req, res) {
             }
         }
     }
+    mostrarReserva("Reservas luego de cancelar");
+    res.end(resp);
+});
+
+app.post('/cancelarreservas', function (req, res) {
+    console.log(req.params);
+    console.log(req.body);
+    var idReservaCom = req.body;
+    var resp = "FALLO";
+    for (var i = 0; i < reservas.length; i++) {
+        //console.log("Reserva en servidor "+reservas[i].idReserv + " Reserva a completar "+ idReservaCom.idres);
+        if (reservas[i].idReserv == idReservaCom.idres) {
+            if (reservas[i].estado == "E"){
+                cambiarEstadoReserva(i,"CA");
+                resp = "OK";
+                break;
+            }else{
+                break;
+            }
+        }
+    }
+    mostrarReserva("Reservas luego de cancelar");
     res.end(resp);
 });
 
@@ -156,3 +179,6 @@ function mostrarReserva(text){
     console.log(reservas);
 }
 
+function cambiarEstadoReserva(indice,estado){
+    reservas[indice].estado = estado;
+}

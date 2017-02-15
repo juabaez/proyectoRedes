@@ -46,6 +46,7 @@ app.get('/listReservas', function (req, res) {
             j++;
         }
     }
+    console.log("Reservas a completar / cancelar");
     console.log(resAux);
     res.end(JSON.stringify(resAux));
 });
@@ -59,7 +60,7 @@ app.post('/completarreservas', function (req, res) {
         //console.log("Reserva en servidor "+reservas[i].idReserv + " Reserva a completar "+ idReservaCom.idres);
         if (reservas[i].idReserv == idReservaCom.idres) {
             if (reservas[i].estado == "E"){
-                reservas[i].estado = "C";
+                cambiarEstadoReserva(i,"C");
                 resp = "OK";
                 break;
             }else{
@@ -67,6 +68,28 @@ app.post('/completarreservas', function (req, res) {
             }
         }
     }
+    mostrarReserva("Reservas luego de cancelar");
+    res.end(resp);
+});
+
+app.post('/cancelarreservas', function (req, res) {
+    console.log(req.params);
+    console.log(req.body);
+    var idReservaCom = req.body;
+    var resp = "FALLO";
+    for (var i = 0; i < reservas.length; i++) {
+        //console.log("Reserva en servidor "+reservas[i].idReserv + " Reserva a completar "+ idReservaCom.idres);
+        if (reservas[i].idReserv == idReservaCom.idres) {
+            if (reservas[i].estado == "E"){
+                cambiarEstadoReserva(i,"CA");
+                resp = "OK";
+                break;
+            }else{
+                break;
+            }
+        }
+    }
+    mostrarReserva("Reservas luego de cancelar");
     res.end(resp);
 });
 
@@ -94,7 +117,7 @@ function cancelarReserva(){
     var resAux = [];
     for (var i = reservas.length -1; i >=0 ; i--) {
         //console.log("Parse cada reserva: "+reservas[i]);
-        if (reservas[i].estado == "E"){
+        if (reservas[i].estado == "E" || reservas[i].estado == "CA"){
             var diff = server1;
             var dateReserva = new Date(reservas[i].date).getTime();
             var dateNow = new Date().getTime();
@@ -102,7 +125,7 @@ function cancelarReserva(){
             diffDate = diffDate.toPrecision(2)-1;
             console.log("Diff dias para cancelar: "+diff);
             console.log("Diff entre hoy y la reserva: "+diffDate);
-            if (diffDate>diff) {
+            if (diffDate>diff || reservas[i].estado == "CA") {
                 //console.log("elimino reserva "+reservas[i].idReserv);
                 //console.log("elimino reserva "+reservas[i].estado);
                 reservas.pop();
@@ -156,3 +179,6 @@ function mostrarReserva(text){
     console.log(reservas);
 }
 
+function cambiarEstadoReserva(indice,estado){
+    reservas[indice].estado = estado;
+}
