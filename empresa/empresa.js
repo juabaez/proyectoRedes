@@ -17,11 +17,11 @@ app.use(function(req, res, next) {
 
 //Reservas 
 var reservas = [];
-var ires = 3;
+var ires = 4;
 //Reservas base
 reservas.push({idReserv: 1, name: "Juan Baez",date:"2017-01-01",estado:"E",idTramo:1});
 reservas.push({idReserv: 2, name: "Laura Rosas",date:"2017-01-03",estado:"E",idTramo:2});
-reservas.push({idReserv: 3, name: "Eduardo Juarez",date:"2017-01-03",estado:"C",idTramo:3});
+reservas.push({idReserv: 3, name: "Eduardo Juarez",date:"2017-01-04",estado:"C",idTramo:3});
 
 //Retorna si hay disponibles cierta cantidad de asientos en un tramo
 var disponible = function(cant, reservados){
@@ -37,12 +37,37 @@ app.get('/list', function (req, res) {
 });
 
 app.get('/listReservas', function (req, res) {
-     res.end(JSON.stringify(reservas));
+    var resAux = [];
+    var j = 1;
+    cancelarReserva();
+    for (var i = 0; i < reservas.length; i++) {
+        if (reservas[i].estado=="E") {
+            resAux.push(reservas[i]);
+            j++;
+        }
+    }
+    console.log(resAux);
+    res.end(JSON.stringify(resAux));
 });
 
 app.post('/completarreservas', function (req, res) {
     console.log(req.params);
     console.log(req.body);
+    var idReservaCom = req.body;
+    var resp = "FALLO";
+    for (var i = 0; i < reservas.length; i++) {
+        //console.log("Reserva en servidor "+reservas[i].idReserv + " Reserva a completar "+ idReservaCom.idres);
+        if (reservas[i].idReserv == idReservaCom.idres) {
+            if (reservas[i].estado == "E"){
+                reservas[i].estado = "C";
+                resp = "OK";
+                break;
+            }else{
+                break;
+            }
+        }
+    }
+    res.end(resp);
 });
 
 app.post('/reservar', function (req, res) {
@@ -56,8 +81,7 @@ app.post('/reservar', function (req, res) {
 //    console.log(disponible(tramos.cantidad,tramos.reservado));
     if (disponible(tramos.cantidad,tramos.reservado)) {
         reservas.push({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),estado:"E",idTramo:tramos.id});
-        console.log("RESERVA AGREGADA");
-        console.log(reservas);
+        mostrarReserva("RESERVAS LUEGO DE AGREGAR RESERVA");
         actualizarReservas(tramos,tramos.id);
         ires++;
         res.end("OK");
@@ -67,24 +91,29 @@ app.post('/reservar', function (req, res) {
 });
 
 function cancelarReserva(){
+    var resAux = [];
     for (var i = reservas.length -1; i >=0 ; i--) {
         //console.log("Parse cada reserva: "+reservas[i]);
-        var diff = server1;
-        var dateReserva = new Date(reservas[i].date).getTime();
-        var dateNow = new Date().getTime();
-        var diffDate = (dateNow-dateReserva)/(1000*60*60*24);
-        diffDate = diffDate.toPrecision(2)-1;
-        console.log("Diff dias para cancelar: "+diff);
-        console.log("Diff entre hoy y la reserva: "+diffDate);
-        if (diffDate>diff && reservas[estado]=="E") {
+        if (reservas[i].estado == "E"){
+            var diff = server1;
+            var dateReserva = new Date(reservas[i].date).getTime();
+            var dateNow = new Date().getTime();
+            var diffDate = (dateNow-dateReserva)/(1000*60*60*24);
+            diffDate = diffDate.toPrecision(2)-1;
+            console.log("Diff dias para cancelar: "+diff);
+            console.log("Diff entre hoy y la reserva: "+diffDate);
+            if (diffDate>diff) {
+                //console.log("elimino reserva "+reservas[i].idReserv);
+                //console.log("elimino reserva "+reservas[i].estado);
+                reservas.pop();
+            }
+        }else{
+            resAux.push(reservas[i]);
             reservas.pop();
         }
-        if(reservas.length===0){
-            ires=1;
-        }
     }
-    console.log("Reservas luego de cancelarlas automaticamente:");
-    console.log(reservas);
+    reservas = resAux;
+    mostrarReserva("Reservas luego de cancelarlas automaticamente:");
 }
 
 function actualizarReservas(tramos,idTramo){
@@ -112,8 +141,7 @@ var server = app.listen(8080, function () {
 
   //var host = server.address().address;
   //var port = server.address().port;
-  console.log("Reservas al comenzar");
-  console.log(reservas);
+  mostrarReserva("RESERVAS AL COMENZAR");
   //console.log("Despues de cancelar las reservas");
   //console.log(reservas);
   //reservas.push({idReserv: ires, name: "Juan Baez",date:"2017-01-01",idTramo:3});
@@ -122,4 +150,9 @@ var server = app.listen(8080, function () {
   console.log("Listen http://localhost:%s", server.address().port);
 
 });
+
+function mostrarReserva(text){
+    console.log(text);
+    console.log(reservas);
+}
 

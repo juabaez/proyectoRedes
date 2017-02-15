@@ -1,25 +1,25 @@
 [{
   "cOrigen": "Río Cuarto",
-  "cDestino": "Buenos Aires",
+  "cDestino": "Mendoza",
   "cantidad": 159,
   "reservado": 1,
-  "id": 1
+  "id": 5
 },{
-  "cOrigen": "Buenos Aires",
+  "cOrigen": "Mendoza",
   "cDestino": "Río Cuarto",
   "cantidad": 159,
   "reservado": 1,
-  "id": 2
-},{
+  "id": 6
+}, {
   "cOrigen": "Buenos Aires",
-  "cDestino": "Montevideo",
+  "cDestino": "Rosario",
   "cantidad": 159,
   "reservado": 1,
-  "id": 3
-},{
-  "cOrigen": "Montevideo",
-  "cDestino": "Buenos Aires",
+  "id": 7
+},  {
+  "cOrigen": "Rosario",
+  "cDestino": "Río Cuarto",
   "cantidad": 160,
   "reservado": 0,
-  "id": 4
+  "id": 8
 }]

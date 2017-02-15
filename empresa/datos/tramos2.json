@@ -1,29 +1,24 @@
 [{
-        
   "cOrigen": "Río Cuarto",
   "cDestino": "Mendoza",
-  "precio": 700,
   "cantidad": 159,
   "reservado": 1,
   "id": 5
 },{
   "cOrigen": "Mendoza",
   "cDestino": "Río Cuarto",
-  "precio": 700,
   "cantidad": 159,
   "reservado": 1,
   "id": 6
 }, {
   "cOrigen": "Buenos Aires",
   "cDestino": "Rosario",
-  "precio": 500,
-  "cantidad": 160,
-  "reservado": 0,
+  "cantidad": 159,
+  "reservado": 1,
   "id": 7
 },  {
   "cOrigen": "Rosario",
   "cDestino": "Río Cuarto",
-  "precio": 500,
   "cantidad": 160,
   "reservado": 0,
   "id": 8
