@@ -33,7 +33,7 @@ function generarTramos(cOrigen,cDestino,tramos,serverUrl) {
   addGrafo(tramos,serverUrl);
   paths = [];
   allTramosGrafo(grafoTramos,cOrigen,cDestino,[cOrigen]);
-  addTramoTable(paths);
+  TramoTable(paths);
 }
 
 function addGrafo(tramos,serverUrl) {
@@ -69,7 +69,7 @@ function reservar(path){
     }
 }
 
-function addTramoTable(paths){
+function TramoTable(paths){
     var tableDiv = document.getElementById("table");
     while(tableDiv.firstChild){
         tableDiv.removeChild(tableDiv.firstChild);
@@ -143,6 +143,29 @@ function completarReserva() {
             }
         };
         xhttp.open("POST", serverUrl+"/completarreservas", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(JSON.stringify({idres:reserv[0]}));
+    }
+}
+
+function cancelarReserva() {
+    var i = document.getElementById("reserva").selectedIndex;
+    console.log("Obtener las reservas "+document.getElementsByTagName("option")[i].value);
+    var reserv = document.getElementsByTagName("option")[i].value;
+    reserv = reserv.split(" - ");
+    //console.log("Primera parte "+reserv[0]+" segunda parte "+reserv[1]);
+    for (var i=0; i < empresas.length; i++) {
+        var serverUrl = empresas[i];
+        var xhttp = new XMLHttpRequest();
+        xhttp.serverUrl = serverUrl;
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log("Reserva Cancelada: "+ this.responseText);
+                alert("Reserva Cancelada: "+ this.responseText);
+                javascript:location.reload();
+            }
+        };
+        xhttp.open("POST", serverUrl+"/cancelarreservas", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(JSON.stringify({idres:reserv[0]}));
     }
