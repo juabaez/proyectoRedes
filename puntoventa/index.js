@@ -77,29 +77,6 @@ app.get('/reservas', function (req, res) {
     );
 });
 
-var reservas;
-app.get('/cancelar', function (req, res) {
-    reservas = [];
-    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-    var xhr = new XMLHttpRequest();
-    for (var i=0; i < empresas.length; i++) {
-        console.log(empresas[i]);
-        var serverUrl = empresas[i];
-        xhr.serverUrl = serverUrl;
-        xhr.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            var jsonReservas = JSON.parse(this.responseText);
-            agregarReservas(jsonReservas,serverUrl);
-          }
-        };
-        xhr.open("GET", serverUrl+"/listReservas", false);
-        xhr.send();
-    }
-    res.render('reservas',
-    { title : 'Venta De Pasajes', reservas: reservas}
-    );
-});
-
 function agregarReservas(reservasjson,url){
     var jsonTramos;
     var tramo;
@@ -155,4 +132,4 @@ function contiene(ciudad){
     return contiene;
 }
 
-app.listen(3000);
+app.listen(2020);
