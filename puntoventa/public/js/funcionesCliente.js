@@ -77,25 +77,25 @@ function TramoTable(paths){
     tableDiv.style.width = "500px";
 
     for (var i=0; i<paths.length; i++){
-        var pathTr = document.createElement('TR');
+        var tr = document.createElement('TR');
 
         var path = paths[i];
-        var pathTable = document.createElement('TABLE');
-        pathTable.border='1';
+        var table = document.createElement('TABLE');
+        table.border='1';
 
-        var pathTableCaption = document.createElement('CAPTION');
-        pathTableCaption.appendChild(document.createTextNode("Opción "+(i+1)));
-        pathTable.appendChild(pathTableCaption);
+        var tableCaption = document.createElement('CAPTION');
+        tableCaption.appendChild(document.createTextNode("Opción "+(i+1)));
+        table.appendChild(tableCaption);
 
-        var pathTableBody = document.createElement('TBODY');
-        pathTable.appendChild(pathTableBody);
+        var tableBody = document.createElement('TBODY');
+        table.appendChild(tableBody);
 
-        var pathTd = document.createElement('TD');
-        pathTd.width='1000';
-        pathTd.appendChild(pathTable);
+        var td = document.createElement('TD');
+        td.width='1000';
+        td.appendChild(table);
         for (var j=0; j<path.length-1; j++){
-            var travelTr = document.createElement('TR');
-            pathTableBody.appendChild(travelTr);
+            var tramoTr = document.createElement('TR');
+            tableBody.appendChild(tramoTr);
             var origenTd = document.createElement('TD');
             var destinoTd = document.createElement('TD');
             origenTd.style.paddingTop='10px';
@@ -104,21 +104,21 @@ function TramoTable(paths){
             destinoTd.style.paddingTop='10px';
             destinoTd.width='100';
             destinoTd.appendChild(document.createTextNode(path[j+1]));
-            travelTr.appendChild(origenTd);
-            travelTr.appendChild(destinoTd);
+            tramoTr.appendChild(origenTd);
+            tramoTr.appendChild(destinoTd);
         }
-        pathTr.appendChild(pathTd);
-        tableDiv.appendChild(pathTable);
-        var buttonReserva = document.createElement('BUTTON');
-        buttonReserva.appendChild(document.createTextNode('Reservar'));
-        buttonReserva.style.float='right';
-        buttonReserva.travel = path;
-        buttonReserva.onclick = function(){
+        tr.appendChild(td);
+        tableDiv.appendChild(table);
+        var botonReserva = document.createElement('BUTTON');
+        botonReserva.appendChild(document.createTextNode('Reservar'));
+        botonReserva.style.float='right';
+        botonReserva.travel = path;
+        botonReserva.onclick = function(){
             reservar(this.travel);
         };
-        pathTr.appendChild(pathTd);
-        tableDiv.appendChild(pathTable);
-        tableDiv.appendChild(buttonReserva);
+        tr.appendChild(td);
+        tableDiv.appendChild(table);
+        tableDiv.appendChild(botonReserva);
         tableDiv.appendChild(document.createElement('BR'));
         tableDiv.appendChild(document.createElement('BR'));
     }
