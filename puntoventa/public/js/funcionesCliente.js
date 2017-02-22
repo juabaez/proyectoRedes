@@ -30,8 +30,8 @@ function buscar() {
 }
 
 function generarTramos(cOrigen,cDestino,tramos,serverUrl) {
-  addGrafo(tramos,serverUrl);
   paths = [];
+  addGrafo(tramos,serverUrl);
   allTramosGrafo(grafoTramos,cOrigen,cDestino,[cOrigen]);
   TramoTable(paths);
 }
