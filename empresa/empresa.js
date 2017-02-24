@@ -17,6 +17,7 @@ app.use(function(req, res, next) {
 
 //Reservas 
 var reservas = [];
+var reservasAux = [];
 var ires = 4;
 //Reservas base
 reservas.push({idReserv: 1, name: "Juan Baez",date:"2017-01-01",estado:"E",idTramo:1});
@@ -103,14 +104,38 @@ app.post('/reservar', function (req, res) {
 //    console.log("cantidad "+tramos.cantidad +" "+tramos.reservado);
 //    console.log(disponible(tramos.cantidad,tramos.reservado));
     if (disponible(tramos.cantidad,tramos.reservado)) {
-        reservas.push({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),estado:"E",idTramo:tramos.id});
-        mostrarReserva("RESERVAS LUEGO DE AGREGAR RESERVA");
+        reservasAux.push({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),estado:"E",idTramo:tramos.id});
+        mostrarReserva("RESERVAS LUEGO DE AGREGAR RESERVA EN AUX");
         actualizarReservas(tramos,tramos.id);
         ires++;
-        res.end("OK");
+        res.end(JSON.stringify({estado:"OK",idres:ires-1,url:"http://localhost:"+ server.address().port}));
     } else {
         res.end("FALLO");
     }
+});
+
+app.post('/commited', function (req, res) {
+    console.log(req.params);
+    console.log(req.body);
+    var idRes;
+    idRes = req.body;
+    var aux = [];
+    for (var i = 0; i < reservasAux.length; i++) {
+        if (reservasAux[i].idReserv==idRes) {
+            reservas.push(reservasAux[i]);
+            reservasAux.pop();
+            break;
+        }else{
+            aux.push(reservasAux[i]);
+            reservasAux.pop();
+        }
+    }
+    for (var i = 0; i < aux.length; i++) {
+        reservasAux.push(aux[i]);
+        aux.pop();
+    }
+    mostrarReserva("RESERVAS LUEGO DE COMMITEAR RESERVA");
+    res.end("OK");
 });
 
 function cancelarReserva(){
@@ -135,7 +160,10 @@ function cancelarReserva(){
             reservas.pop();
         }
     }
-    reservas = resAux;
+    for (var i = 0; i < resAux.length; i++) {
+        reservas.push(resAux[i]);
+        resAux.pop();
+    }
     mostrarReserva("Reservas luego de cancelarlas automaticamente:");
 }
 
