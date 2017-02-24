@@ -120,7 +120,7 @@ app.post('/commited', function (req, res) {
     var idRes;
     idRes = req.body;
     var aux = [];
-    for (var i = 0; i < reservasAux.length; i++) {
+    for (var i = reservasAux.length; i >=1 ; i--) {
         if (reservasAux[i].idReserv==idRes) {
             reservas.push(reservasAux[i]);
             reservasAux.pop();
@@ -130,7 +130,7 @@ app.post('/commited', function (req, res) {
             reservasAux.pop();
         }
     }
-    for (var i = 0; i < aux.length; i++) {
+    for (var i = aux.length; i >=1 ; i--) {
         reservasAux.push(aux[i]);
         aux.pop();
     }
@@ -160,7 +160,7 @@ function cancelarReserva(){
             reservas.pop();
         }
     }
-    for (var i = 0; i < resAux.length; i++) {
+    for (var i = resAux.length; i >=1 ; i--) {
         reservas.push(resAux[i]);
         resAux.pop();
     }
