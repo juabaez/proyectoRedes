@@ -1,7 +1,7 @@
 /*
  * Module dependencies
  */
-/* global __dirname, ciudades */
+/* global __dirname, ciudades, require */
 
 var express = require('express');
 var xml = require('xmlhttprequest');

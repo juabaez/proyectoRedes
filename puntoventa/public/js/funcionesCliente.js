@@ -1,8 +1,73 @@
+/* global LinkedList, javascript */
+var LinkedList = function(e){
+
+   var that = {}, first, last;
+   var size = 0;
+
+   that.push = function(value){
+      var node = new Node(value);
+      if(first == null){
+         first = last = node;
+      }else{
+         last.next = node;
+         last = node;
+      }
+      size++;
+   };
+
+   that.pop = function(){
+      var value = first;
+      first = first.next;
+      return value;
+   };
+   
+   that.length = function () {
+        return size;
+    };
+    
+    that.get = function (index) {
+        var current = first;
+        for (var i = 0; i < size; i++) {
+            if (i === index) {
+                return current.value;
+            }else{
+                current = current.next;
+            }
+        }
+    };
+
+   that.remove = function(index) {
+      var i = 0;
+      var current = first, previous;
+      if(index === 0){
+          //handle special case - first node
+          first = current.next;
+      }else{
+          while(i++ < index){
+              //set previous to first node
+              previous = current;
+              //set current to the next one
+              current = current.next
+          }
+          //skip to the next node
+          previous.next = current.next;
+      }
+      return current.value;
+   };
+
+   var Node = function(value){
+      this.value = value;
+      var next = {};
+   };
+
+   return that;
+};
+
 var empresas = ["http://localhost:8080","http://localhost:8081","http://localhost:8082"];
 
 var grafoTramos = new graphlib.Graph(); //crea un graph
 var paths = [];
-
+var respList = LinkedList();
 
 function buscar() {
   var paramOrigen = document.getElementById("origen");
@@ -52,21 +117,71 @@ function addGrafo(tramos,serverUrl) {
 }
 
 function reservar(path){
-  for(var i=0; i < path.length-1; i++) {
-    var tramo = grafoTramos.edge({ v: path[i], w: path[i+1] });
-    console.log(tramo);
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        console.log("RESERVA PASAJE: " + this.responseText);
-        alert("RESERVA PASAJE: " + this.responseText);
-        javascript:location.reload();
-      }
-    };
-    xhttp.open("POST", tramo.providerUrl +"/reservar", true);
-    xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.send(JSON.stringify(tramo));
+    for(var i=0; i < path.length-1; i++) {
+        var tramo = grafoTramos.edge({ v: path[i], w: path[i+1] });
+        console.log(tramo);
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            console.log("RESERVA PASAJE: " + this.responseText);
+            respList.push(JSON.parse(this.responseText));
+            //alert("RESERVA PASAJE: " + "estado "+respList.get(0).estado);
+            //javascript:location.reload();
+          }
+        };
+        xhttp.open("POST", tramo.providerUrl +"/reservar", false);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send(JSON.stringify(tramo));
     }
+    console.log("ACA");
+    //aca verificar que todos respondieron OK
+    //sino hacer un rollback
+    var xhttp = new XMLHttpRequest();
+    console.log(!isFallo());
+//    if (!isFallo()) {
+//        // aca hago el commit
+//        for (i = 0; i < respList.length(); i++) {
+//            xhttp.onreadystatechange = function() {
+//                if (this.readyState == 4 && this.status == 200) {
+//                    console.log("COMMITED PASAJE: " + this.responseText);
+//                    respList.remove(i);
+//                }
+//            };
+//            xhttp.open("POST", respList.get(i).url +"/commited", true);
+//            xhttp.setRequestHeader("Content-Type", "application/json");
+//            xhttp.send(JSON.stringify(respList.get(i).idres));
+//        }
+//        alert("RESERVA PASAJE: OK");
+//        javascript:location.reload();
+//    }else{
+//        // aca hago el rollback
+//        for (i = 0; i < respList.length(); i++) {
+//            xhttp.onreadystatechange = function() {
+//                if (this.readyState == 4 && this.status == 200) {
+//                    console.log("ROLLBACK PASAJE: " + this.responseText);
+//                    respList.remove(i);
+//                }
+//            };
+//            xhttp.open("POST", respList.get(i).url +"/rollback", true);
+//            xhttp.setRequestHeader("Content-Type", "application/json");
+//            xhttp.send(JSON.stringify(respList.get(i).idres));
+//        }
+//        alert("RESERVA PASAJE: FALLO");
+//        javascript:location.reload();
+//    }
+    
+    
+}
+
+function isFallo(){
+    var fallo = false;
+    for (i = 0; i < respList.length() && !fallo; i++) {
+        if (respList.get(i).estado==="FALLO") {
+            fallo = true;
+            break;
+        }
+    }
+    return fallo;
 }
 
 function TramoTable(paths){
@@ -170,3 +285,4 @@ function cancelarReserva() {
         xhttp.send(JSON.stringify({idres:reserv[0]}));
     }
 }
+
