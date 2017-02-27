@@ -1,4 +1,67 @@
 /* global __dirname */
+var LinkedList = function(e){
+
+   var that = {}, first, last;
+   var size = 0;
+
+   that.push = function(value){
+      var node = new Node(value);
+      if(first == null){
+         first = last = node;
+      }else{
+         last.next = node;
+         last = node;
+      }
+      size++;
+   };
+
+   that.pop = function(){
+      var value = first;
+      first = first.next;
+      return value;
+   };
+   
+   that.length = function () {
+        return size;
+    };
+    
+    that.get = function (index) {
+        var current = first;
+        for (var i = 0; i < size; i++) {
+            if (i === index) {
+                return current.value;
+            }else{
+                current = current.next;
+            }
+        }
+    };
+
+   that.remove = function(index) {
+      var i = 0;
+      var current = first, previous;
+      if(index === 0){
+          //handle special case - first node
+          first = current.next;
+      }else{
+          while(i++ < index){
+              //set previous to first node
+              previous = current;
+              //set current to the next one
+              current = current.next
+          }
+          //skip to the next node
+          previous.next = current.next;
+      }
+      return current.value;
+   };
+
+   var Node = function(value){
+      this.value = value;
+      var next = {};
+   };
+
+   return that;
+};
 
 var express = require('express');
 var app = express();
@@ -17,12 +80,12 @@ app.use(function(req, res, next) {
 
 //Reservas 
 var reservas = [];
-var reservasAux = [];
+var reservasAux = LinkedList();
 var ires = 4;
 //Reservas base
 reservas.push({idReserv: 1, name: "Juan Baez",date:"2017-01-01",estado:"E",idTramo:1});
 reservas.push({idReserv: 2, name: "Laura Rosas",date:"2017-01-03",estado:"E",idTramo:2});
-reservas.push({idReserv: 3, name: "Eduardo Juarez",date:"2017-01-04",estado:"C",idTramo:3});
+reservas.push({idReserv: 3, name: "Eduardo Juarez",date:"2017-01-26",estado:"C",idTramo:3});
 
 //Retorna si hay disponibles cierta cantidad de asientos en un tramo
 var disponible = function(cant, reservados){
@@ -110,7 +173,7 @@ app.post('/reservar', function (req, res) {
         ires++;
         res.end(JSON.stringify({estado:"OK",idres:ires-1,url:"http://localhost:"+ server.address().port}));
     } else {
-        res.end("FALLO");
+        res.end(JSON.stringify({estado:"FALLO",url:"http://localhost:"+ server.address().port}));
     }
 });
 
@@ -118,21 +181,15 @@ app.post('/commited', function (req, res) {
     console.log(req.params);
     console.log(req.body);
     var idRes;
-    idRes = req.body;
-    var aux = [];
-    for (var i = reservasAux.length; i >=1 ; i--) {
-        if (reservasAux[i].idReserv==idRes) {
-            reservas.push(reservasAux[i]);
-            reservasAux.pop();
+    idRes = req.body.id;
+    
+    for (var i =0; i < reservasAux.length() ; i++) {
+        if (reservasAux.get(i).idReserv===idRes) {
+            console.log("Commited "+JSON.stringify(reservasAux.get(i)));
+            reservas.push(JSON.stringify(reservasAux.get(i)));
+            reservasAux.remove(i);
             break;
-        }else{
-            aux.push(reservasAux[i]);
-            reservasAux.pop();
         }
-    }
-    for (var i = aux.length; i >=1 ; i--) {
-        reservasAux.push(aux[i]);
-        aux.pop();
     }
     mostrarReserva("RESERVAS LUEGO DE COMMITEAR RESERVA");
     res.end("OK");
