@@ -1,4 +1,4 @@
-/* global LinkedList, javascript */
+/* global LinkedList, javascript, graphlib */
 var LinkedList = function(e){
 
    var that = {}, first, last;
@@ -133,42 +133,42 @@ function reservar(path){
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send(JSON.stringify(tramo));
     }
-    console.log("ACA");
+    console.log("ACA EMPIEZA LA VERIFICACION PARA EL COMMITED");
     //aca verificar que todos respondieron OK
     //sino hacer un rollback
     var xhttp = new XMLHttpRequest();
-    console.log(!isFallo());
-//    if (!isFallo()) {
-//        // aca hago el commit
-//        for (i = 0; i < respList.length(); i++) {
-//            xhttp.onreadystatechange = function() {
-//                if (this.readyState == 4 && this.status == 200) {
-//                    console.log("COMMITED PASAJE: " + this.responseText);
-//                    respList.remove(i);
-//                }
-//            };
-//            xhttp.open("POST", respList.get(i).url +"/commited", true);
-//            xhttp.setRequestHeader("Content-Type", "application/json");
-//            xhttp.send(JSON.stringify(respList.get(i).idres));
-//        }
-//        alert("RESERVA PASAJE: OK");
-//        javascript:location.reload();
-//    }else{
-//        // aca hago el rollback
-//        for (i = 0; i < respList.length(); i++) {
-//            xhttp.onreadystatechange = function() {
-//                if (this.readyState == 4 && this.status == 200) {
-//                    console.log("ROLLBACK PASAJE: " + this.responseText);
-//                    respList.remove(i);
-//                }
-//            };
-//            xhttp.open("POST", respList.get(i).url +"/rollback", true);
-//            xhttp.setRequestHeader("Content-Type", "application/json");
-//            xhttp.send(JSON.stringify(respList.get(i).idres));
-//        }
-//        alert("RESERVA PASAJE: FALLO");
-//        javascript:location.reload();
-//    }
+    console.log("Entra en: "+!isFallo());
+    if (!isFallo()) {
+        // aca hago el commit
+        for (i = 0; i < respList.length(); i++) {
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("COMMITED PASAJE: " + this.responseText);
+                    respList.remove(i);
+                }
+            };
+            xhttp.open("POST", respList.get(i).url +"/commited", false);
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            xhttp.send(JSON.stringify({id:respList.get(i).idres}));
+        }
+        alert("RESERVA PASAJE: OK");
+        javascript:location.reload();
+    }else{
+        // aca hago el rollback
+        for (i = 0; i < respList.length(); i++) {
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("ROLLBACK PASAJE: " + this.responseText);
+                    respList.remove(i);
+                }
+            };
+            xhttp.open("POST", respList.get(i).url +"/rollback", false);
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            xhttp.send(JSON.stringify({id:respList.get(i).idres}));
+        }
+        alert("RESERVA PASAJE: FALLO");
+        javascript:location.reload();
+    }
     
     
 }
