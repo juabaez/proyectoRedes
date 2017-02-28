@@ -1,67 +1,132 @@
 /* global __dirname */
-var LinkedList = function(e){
+function Node(data)
+{
+    this.next = null;
+    this.data = data;
+}
 
-   var that = {}, first, last;
-   var size = 0;
+function LinkedList()
+{
+    this.length = 0;
+    this.head = null;
 
-   that.push = function(value){
-      var node = new Node(value);
-      if(first == null){
-         first = last = node;
-      }else{
-         last.next = node;
-         last = node;
-      }
-      size++;
-   };
+    // add node with given value to the list.
+    this.add = function (value)
+    {
+        var node = new Node(value);
 
-   that.pop = function(){
-      var value = first;
-      first = first.next;
-      return value;
-   };
-   
-   that.length = function () {
-        return size;
-    };
-    
-    that.get = function (index) {
-        var current = first;
-        for (var i = 0; i < size; i++) {
-            if (i === index) {
-                return current.value;
-            }else{
-                current = current.next;
-            }
+        var temp;
+
+        if(this.length === 0)
+        {
+            this.head = node;
+            this.length++;
+            return;
         }
+
+        temp = this.head;
+
+        // Move to the position where we can perform addition
+        // This logic is slightly different when we for example need to do search.
+        while(temp.next)
+        {
+            temp = temp.next;
+        }
+
+        temp.next = node;
+        this.length++;
+
+        return;
+
     };
 
-   that.remove = function(index) {
-      var i = 0;
-      var current = first, previous;
-      if(index === 0){
-          //handle special case - first node
-          first = current.next;
-      }else{
-          while(i++ < index){
-              //set previous to first node
-              previous = current;
-              //set current to the next one
-              current = current.next
-          }
-          //skip to the next node
-          previous.next = current.next;
-      }
-      return current.value;
-   };
+    // Search for node with given value.
+        this.search = function (value)
+    {
+        // index where the node was found
+        var index = 0;
 
-   var Node = function(value){
-      this.value = value;
-      var next = {};
-   };
+        // If the list is empty there is no point in searching.
+        if(!this.head)
+        {
+            console.log("List is empty");
+            return null;
 
-   return that;
-};
+        }
+
+        var temp = this.head;
+        var i = 0;
+        while(i<this.length)
+        {
+            if(i === value)
+            {
+                console.log("Found at: "  + index);
+                return temp;
+            }
+
+            // move to next node
+            temp = temp.next;
+
+            index++;
+        }
+
+        console.log("Node not found");
+
+    };
+
+    // Dump whole list
+    this.print = function()
+    {
+        if(!this.head)
+        {
+            console.log("List is empty");
+            return;
+
+        }
+
+        var temp = this.head;
+
+        while(temp)
+        {
+            console.log(temp.data);
+            temp = temp.next;
+        }
+
+    };
+
+    // Remove node at index. Index starts from 0.
+    this.removeAtIndex = function (index)
+    {
+        var i = 0;
+
+        if(index < 0 || index >= this.length)
+            throw "Wrong index";
+
+        var temp = this.head;
+
+        if(!this.head)
+            return;
+
+        if(index === 0)
+        {
+            this.head = this.head.next;
+            this.length--;
+            return;
+        }
+
+        // Move to the position where we can perform delete.
+        for(i = 0; i < index  - 1; i++)
+        {
+            temp = temp.next;
+        }
+
+        temp.next = temp.next.next;
+        this.length--;
+        return;
+
+
+    };
+}
 
 var express = require('express');
 var app = express();
@@ -80,7 +145,7 @@ app.use(function(req, res, next) {
 
 //Reservas 
 var reservas = [];
-var reservasAux = LinkedList();
+var reservasAux = new LinkedList();
 var ires = 4;
 //Reservas base
 reservas.push({idReserv: 1, name: "Juan Baez",date:"2017-01-01",estado:"E",idTramo:1});
@@ -167,7 +232,7 @@ app.post('/reservar', function (req, res) {
 //    console.log("cantidad "+tramos.cantidad +" "+tramos.reservado);
 //    console.log(disponible(tramos.cantidad,tramos.reservado));
     if (disponible(tramos.cantidad,tramos.reservado)) {
-        reservasAux.push({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),estado:"E",idTramo:tramos.id});
+        reservasAux.add({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),estado:"E",idTramo:tramos.id});
         mostrarReserva("RESERVAS LUEGO DE AGREGAR RESERVA EN AUX");
         actualizarReservas(tramos,tramos.id);
         ires++;
@@ -183,11 +248,11 @@ app.post('/commited', function (req, res) {
     var idRes;
     idRes = req.body.id;
     
-    for (var i =0; i < reservasAux.length() ; i++) {
-        if (reservasAux.get(i).idReserv===idRes) {
-            console.log("Commited "+JSON.stringify(reservasAux.get(i)));
-            reservas.push(JSON.stringify(reservasAux.get(i)));
-            reservasAux.remove(i);
+    for (var i =0; i < reservasAux.length ; i++) {
+        if (reservasAux.search(i).data.idReserv===idRes) {
+            console.log("Commited "+JSON.stringify(reservasAux.search(i).data));
+            reservas.push(reservasAux.search(i).data);
+            reservasAux.removeAtIndex(i);
             break;
         }
     }
@@ -198,7 +263,7 @@ app.post('/commited', function (req, res) {
 function cancelarReserva(){
     var resAux = [];
     for (var i = reservas.length -1; i >=0 ; i--) {
-        //console.log("Parse cada reserva: "+reservas[i]);
+        console.log("Parse cada reserva: "+reservas[i]);
         if (reservas[i].estado == "E" || reservas[i].estado == "CA"){
             var diff = server1;
             var dateReserva = new Date(reservas[i].date).getTime();
@@ -217,10 +282,10 @@ function cancelarReserva(){
             reservas.pop();
         }
     }
-    for (var i = resAux.length; i >=1 ; i--) {
-        reservas.push(resAux[i]);
-        resAux.pop();
-    }
+//    for (var i = resAux.length; i >=1 ; i--) {
+//        reservas.push(resAux[i]);
+//        resAux.pop();
+//    }
     mostrarReserva("Reservas luego de cancelarlas automaticamente:");
 }
 
