@@ -1,4 +1,132 @@
 /* global __dirname */
+function Node(data)
+{
+    this.next = null;
+    this.data = data;
+}
+
+function LinkedList()
+{
+    this.length = 0;
+    this.head = null;
+
+    // add node with given value to the list.
+    this.add = function (value)
+    {
+        var node = new Node(value);
+
+        var temp;
+
+        if(this.length === 0)
+        {
+            this.head = node;
+            this.length++;
+            return;
+        }
+
+        temp = this.head;
+
+        // Move to the position where we can perform addition
+        // This logic is slightly different when we for example need to do search.
+        while(temp.next)
+        {
+            temp = temp.next;
+        }
+
+        temp.next = node;
+        this.length++;
+
+        return;
+
+    };
+
+    // Search for node with given value.
+        this.search = function (value)
+    {
+        // index where the node was found
+        var index = 0;
+
+        // If the list is empty there is no point in searching.
+        if(!this.head)
+        {
+            //console.log("List is empty");
+            return null;
+
+        }
+
+        var temp = this.head;
+        var i = 0;
+        while(i<this.length)
+        {
+            if(i === value)
+            {
+                //console.log("Found at: "  + index);
+                return temp;
+            }
+
+            // move to next node
+            temp = temp.next;
+
+            index++;
+        }
+
+        console.log("Node not found");
+
+    };
+
+    // Dump whole list
+    this.print = function()
+    {
+        if(!this.head)
+        {
+            console.log("List is empty");
+            return;
+
+        }
+
+        var temp = this.head;
+
+        while(temp)
+        {
+            console.log(temp.data);
+            temp = temp.next;
+        }
+
+    };
+
+    // Remove node at index. Index starts from 0.
+    this.removeAtIndex = function (index)
+    {
+        var i = 0;
+
+        if(index < 0 || index >= this.length)
+            throw "Wrong index";
+
+        var temp = this.head;
+
+        if(!this.head)
+            return;
+
+        if(index === 0)
+        {
+            this.head = this.head.next;
+            this.length--;
+            return;
+        }
+
+        // Move to the position where we can perform delete.
+        for(i = 0; i < index  - 1; i++)
+        {
+            temp = temp.next;
+        }
+
+        temp.next = temp.next.next;
+        this.length--;
+        return;
+
+
+    };
+}
 
 var express = require('express');
 var app = express();
@@ -17,6 +145,7 @@ app.use(function(req, res, next) {
 
 //Reservas 
 var reservas = [];
+var reservasAux = new LinkedList();
 var ires = 4;
 //Reservas base
 reservas.push({idReserv: 1, name: "Milagros Lunea",date:"2017-02-14",estado:"E",idTramo:5});
@@ -94,7 +223,8 @@ app.post('/cancelarreservas', function (req, res) {
 });
 
 app.post('/reservar', function (req, res) {
-    console.log(req.params);
+    //console.log(req.params);
+    console.log("Tramo a reservar");
     console.log(req.body);
     cancelarReserva();
     var tramos;
@@ -103,29 +233,47 @@ app.post('/reservar', function (req, res) {
 //    console.log("cantidad "+tramos.cantidad +" "+tramos.reservado);
 //    console.log(disponible(tramos.cantidad,tramos.reservado));
     if (disponible(tramos.cantidad,tramos.reservado)) {
-        reservas.push({idReserv: ires, name: "Jose Perez",date:new Date().toLocaleDateString(),estado:"E",idTramo:tramos.id});
-        mostrarReserva("RESERVAS LUEGO DE AGREGAR RESERVA");
+        reservasAux.add({idReserv: ires, name: "Juan Baez",date:new Date().toLocaleDateString(),estado:"E",idTramo:tramos.id});
+        mostrarReserva("RESERVAS LUEGO DE AGREGAR RESERVA EN AUX");
         actualizarReservas(tramos,tramos.id);
         ires++;
-        res.end("OK");
+        res.end(JSON.stringify({estado:"OK",idres:ires-1,url:"http://localhost:"+ server.address().port}));
     } else {
-        res.end("FALLO");
+        res.end(JSON.stringify({estado:"FALLO",url:"http://localhost:"+ server.address().port}));
     }
+});
+
+app.post('/commited', function (req, res) {
+    //console.log(req.params);
+    console.log(req.body);
+    var idRes;
+    idRes = req.body.id;
+    
+    for (var i =0; i < reservasAux.length ; i++) {
+        if (reservasAux.search(i).data.idReserv===idRes) {
+            console.log("Commited "+JSON.stringify(reservasAux.search(i).data));
+            reservas.push(reservasAux.search(i).data);
+            reservasAux.removeAtIndex(i);
+            break;
+        }
+    }
+    mostrarReserva("RESERVAS LUEGO DE COMMITEAR RESERVA");
+    res.end("OK");
 });
 
 function cancelarReserva(){
     var resAux = [];
     for (var i = reservas.length -1; i >=0 ; i--) {
         //console.log("Parse cada reserva: "+reservas[i]);
-        if (reservas[i].estado == "E"){
+        if (reservas[i].estado === "E" || reservas[i].estado === "CA"){
             var diff = server1;
             var dateReserva = new Date(reservas[i].date).getTime();
             var dateNow = new Date().getTime();
             var diffDate = (dateNow-dateReserva)/(1000*60*60*24);
             diffDate = diffDate.toPrecision(2)-1;
-            console.log("Diff dias para cancelar: "+diff);
-            console.log("Diff entre hoy y la reserva: "+diffDate);
-            if (diffDate>diff) {
+            //console.log("Diff dias para cancelar: "+diff);
+            //console.log("Diff entre hoy y la reserva: "+diffDate);
+            if (diffDate>diff || reservas[i].estado === "CA") {
                 //console.log("elimino reserva "+reservas[i].idReserv);
                 //console.log("elimino reserva "+reservas[i].estado);
                 reservas.pop();
@@ -136,6 +284,10 @@ function cancelarReserva(){
         }
     }
     reservas = resAux;
+//    for (var i = resAux.length; i >=1 ; i--) {
+//        reservas.push(resAux[i]);
+//        resAux.pop();
+//    }
     mostrarReserva("Reservas luego de cancelarlas automaticamente:");
 }
 
@@ -152,7 +304,7 @@ function actualizarReservas(tramos,idTramo){
         res.push(tramos[i]);
     }
     //console.log(res);
-    fs.writeFile(__dirname + "/datos/" + "tramos_Res_Actual2.json",JSON.stringify(res),function(error){
+    fs.writeFile(__dirname + "/datos/" + "tramos_Res_Actual.json",JSON.stringify(res),function(error){
         if (error)
             console.log(error);
         else
@@ -160,7 +312,7 @@ function actualizarReservas(tramos,idTramo){
     });
 }
 
-var server = app.listen(8081, function () {
+var server = app.listen(8080, function () {
 
   //var host = server.address().address;
   //var port = server.address().port;

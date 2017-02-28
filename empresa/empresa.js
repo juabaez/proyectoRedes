@@ -49,7 +49,7 @@ function LinkedList()
         // If the list is empty there is no point in searching.
         if(!this.head)
         {
-            console.log("List is empty");
+            //console.log("List is empty");
             return null;
 
         }
@@ -60,7 +60,7 @@ function LinkedList()
         {
             if(i === value)
             {
-                console.log("Found at: "  + index);
+                //console.log("Found at: "  + index);
                 return temp;
             }
 
@@ -223,7 +223,8 @@ app.post('/cancelarreservas', function (req, res) {
 });
 
 app.post('/reservar', function (req, res) {
-    console.log(req.params);
+    //console.log(req.params);
+    console.log("Tramo a reservar");
     console.log(req.body);
     cancelarReserva();
     var tramos;
@@ -243,7 +244,7 @@ app.post('/reservar', function (req, res) {
 });
 
 app.post('/commited', function (req, res) {
-    console.log(req.params);
+    //console.log(req.params);
     console.log(req.body);
     var idRes;
     idRes = req.body.id;
@@ -263,16 +264,16 @@ app.post('/commited', function (req, res) {
 function cancelarReserva(){
     var resAux = [];
     for (var i = reservas.length -1; i >=0 ; i--) {
-        console.log("Parse cada reserva: "+reservas[i]);
-        if (reservas[i].estado == "E" || reservas[i].estado == "CA"){
+        //console.log("Parse cada reserva: "+reservas[i]);
+        if (reservas[i].estado === "E" || reservas[i].estado === "CA"){
             var diff = server1;
             var dateReserva = new Date(reservas[i].date).getTime();
             var dateNow = new Date().getTime();
             var diffDate = (dateNow-dateReserva)/(1000*60*60*24);
             diffDate = diffDate.toPrecision(2)-1;
-            console.log("Diff dias para cancelar: "+diff);
-            console.log("Diff entre hoy y la reserva: "+diffDate);
-            if (diffDate>diff || reservas[i].estado == "CA") {
+            //console.log("Diff dias para cancelar: "+diff);
+            //console.log("Diff entre hoy y la reserva: "+diffDate);
+            if (diffDate>diff || reservas[i].estado === "CA") {
                 //console.log("elimino reserva "+reservas[i].idReserv);
                 //console.log("elimino reserva "+reservas[i].estado);
                 reservas.pop();
@@ -282,6 +283,7 @@ function cancelarReserva(){
             reservas.pop();
         }
     }
+    reservas = resAux;
 //    for (var i = resAux.length; i >=1 ; i--) {
 //        reservas.push(resAux[i]);
 //        resAux.pop();
