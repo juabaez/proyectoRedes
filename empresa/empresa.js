@@ -271,8 +271,8 @@ app.post('/commited', function (req, res) {
 });
 
 function cancelarReserva(){
-    var resAux = new LinkedList();
-    for (var i = reservas.length -1; i >=0 ; i--) {
+    var resAux = [];
+    for (var i = 0; i < reservas.length ; i++) {
         console.log("Parse cada reserva: "+JSON.stringify(reservas[i]));
         if (reservas[i].estado === "E" || reservas[i].estado === "CA"){
             var diff = server1;
@@ -285,18 +285,14 @@ function cancelarReserva(){
             if (diffDate>diff || reservas[i].estado === "CA") {
                 console.log("elimino reserva "+reservas[i].idReserv);
                 console.log("elimino reserva "+reservas[i].estado);
-                reservas.pop();
+                reservas.shift();
+            }else{
+                resAux.push(reservas.shift());
             }
         }else{
-            resAux.add(reservas[i]);
-            reservas.pop();
+            resAux.push(reservas.shift());
         }
     }
-    reservas = resAux;
-//    for (var i = 0; i < resAux.length; i++) {
-//        reservas.push(resAux.search(i).data);
-//        resAux.removeAtIndex(i);
-//    }
     mostrarReserva("Reservas luego de cancelarlas automaticamente:");
 }
 
