@@ -271,7 +271,7 @@ app.post('/commited', function (req, res) {
 });
 
 function cancelarReserva(){
-    var resAux = [];
+    var resAux = new LinkedList();
     for (var i = reservas.length -1; i >=0 ; i--) {
         console.log("Parse cada reserva: "+JSON.stringify(reservas[i]));
         if (reservas[i].estado === "E" || reservas[i].estado === "CA"){
@@ -288,14 +288,14 @@ function cancelarReserva(){
                 reservas.pop();
             }
         }else{
-            resAux.push(reservas.pop());
-            
+            resAux.add(reservas[i]);
+            reservas.pop();
         }
     }
     reservas = resAux;
-//    for (var i = resAux.length; i >=1 ; i--) {
-//        reservas.push(resAux[i]);
-//        resAux.pop();
+//    for (var i = 0; i < resAux.length; i++) {
+//        reservas.push(resAux.search(i).data);
+//        resAux.removeAtIndex(i);
 //    }
     mostrarReserva("Reservas luego de cancelarlas automaticamente:");
 }

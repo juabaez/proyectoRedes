@@ -1,1 +1,25 @@
-[{"cOrigen":"Río Cuarto","cDestino":"Buenos Aires","cantidad":142,"reservado":18,"id":1},{"cOrigen":"Buenos Aires","cDestino":"Río Cuarto","cantidad":159,"reservado":1,"id":2},{"cOrigen":"Buenos Aires","cDestino":"Montevideo","cantidad":159,"reservado":1,"id":3},{"cOrigen":"Montevideo","cDestino":"Buenos Aires","cantidad":160,"reservado":0,"id":4}]
+[{
+  "cOrigen": "Río Cuarto",
+  "cDestino": "Buenos Aires",
+  "cantidad": 159,
+  "reservado": 1,
+  "id": 1
+},{
+  "cOrigen": "Buenos Aires",
+  "cDestino": "Río Cuarto",
+  "cantidad": 159,
+  "reservado": 1,
+  "id": 2
+},{
+  "cOrigen": "Buenos Aires",
+  "cDestino": "Montevideo",
+  "cantidad": 159,
+  "reservado": 1,
+  "id": 3
+},{
+  "cOrigen": "Montevideo",
+  "cDestino": "Buenos Aires",
+  "cantidad": 160,
+  "reservado": 0,
+  "id": 4
+}]

@@ -248,39 +248,48 @@ app.post('/commited', function (req, res) {
     console.log(req.body);
     var idRes;
     idRes = req.body.id;
-    
-    for (var i =0; i < reservasAux.length ; i++) {
-        if (reservasAux.search(i).data.idReserv===idRes) {
-            console.log("Commited "+JSON.stringify(reservasAux.search(i).data));
-            reservas.push(reservasAux.search(i).data);
-            reservasAux.removeAtIndex(i);
-            break;
+    var isexiste = false;
+    try{
+        for (var i =0; i < reservasAux.length && !isexiste; i++) {
+            if (reservasAux.search(i).data.idReserv===idRes) {
+                console.log("Commited "+JSON.stringify(reservasAux.search(i).data));
+                reservas.push(reservasAux.search(i).data);
+                reservasAux.removeAtIndex(i);
+                isexiste = true;
+                break;
+            }
         }
+        mostrarReserva("RESERVAS LUEGO DE COMMITEAR RESERVA");
+        if (isexiste) {
+            res.end("COMMITED");
+        }else{
+            res.end("FALLO");
+        }
+    }catch (err){
+        res.end("FALLO");
     }
-    mostrarReserva("RESERVAS LUEGO DE COMMITEAR RESERVA");
-    res.end("OK");
 });
 
 function cancelarReserva(){
     var resAux = [];
     for (var i = reservas.length -1; i >=0 ; i--) {
-        //console.log("Parse cada reserva: "+reservas[i]);
+        console.log("Parse cada reserva: "+JSON.stringify(reservas[i]));
         if (reservas[i].estado === "E" || reservas[i].estado === "CA"){
             var diff = server1;
             var dateReserva = new Date(reservas[i].date).getTime();
             var dateNow = new Date().getTime();
             var diffDate = (dateNow-dateReserva)/(1000*60*60*24);
             diffDate = diffDate.toPrecision(2)-1;
-            //console.log("Diff dias para cancelar: "+diff);
-            //console.log("Diff entre hoy y la reserva: "+diffDate);
+            console.log("Diff dias para cancelar: "+diff);
+            console.log("Diff entre hoy y la reserva: "+diffDate);
             if (diffDate>diff || reservas[i].estado === "CA") {
-                //console.log("elimino reserva "+reservas[i].idReserv);
-                //console.log("elimino reserva "+reservas[i].estado);
+                console.log("elimino reserva "+reservas[i].idReserv);
+                console.log("elimino reserva "+reservas[i].estado);
                 reservas.pop();
             }
         }else{
-            resAux.push(reservas[i]);
-            reservas.pop();
+            resAux.push(reservas.pop());
+            
         }
     }
     reservas = resAux;
