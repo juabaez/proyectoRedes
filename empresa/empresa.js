@@ -248,17 +248,26 @@ app.post('/commited', function (req, res) {
     console.log(req.body);
     var idRes;
     idRes = req.body.id;
-    
-    for (var i =0; i < reservasAux.length ; i++) {
-        if (reservasAux.search(i).data.idReserv===idRes) {
-            console.log("Commited "+JSON.stringify(reservasAux.search(i).data));
-            reservas.push(reservasAux.search(i).data);
-            reservasAux.removeAtIndex(i);
-            break;
+    var existe = true;
+    try{
+        for (var i =0; i < reservasAux.length && existe; i++) {
+            if (reservasAux.search(i).data.idReserv===idRes) {
+                console.log("Commited "+JSON.stringify(reservasAux.search(i).data));
+                reservas.push(reservasAux.search(i).data);
+                reservasAux.removeAtIndex(i);
+                existe = false;
+                break;
+            }
         }
+        mostrarReserva("RESERVAS LUEGO DE COMMITEAR RESERVA");
+        if (existe) {
+            res.end("COMMITED");
+        }else{
+            res.end("FALLO");
+        }
+    }catch (err){
+        res.end("FALLO");
     }
-    mostrarReserva("RESERVAS LUEGO DE COMMITEAR RESERVA");
-    res.end("OK");
 });
 
 function cancelarReserva(){
